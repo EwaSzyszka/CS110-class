@@ -1,3 +1,5 @@
+---------------------------- 4.2 ----------------------------
+
 HAT CHECK
 
 An attendant at a party of N people receives everyone’s hats. 
