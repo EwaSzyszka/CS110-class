@@ -1,0 +1,76 @@
+import numpy as np
+from random import randint
+
+class Trafficsimulation:
+
+    def __init__(self, road_length, density, max_velo, prob_slow_down):
+
+        self.road_length = road_length
+        self.density = density
+        self.max_velo = max_velo
+        self.prob_slow_down = prob_slow_down
+        self.lists = [None] * road_length
+        #self.updates
+
+    def displayParameters(self):
+        print "Road length %d" % self.road_length
+        print ("Array is ", self.lists)
+
+    def assignStates(self):
+        for i in range(self.density):
+            self.lists[i] = randint(0, self.max_velo)
+        np.random.shuffle(self.lists) #put the new values in random positions
+        print self.lists
+
+        k = 0
+        for i in self.lists:
+            if self.lists[k] == None:  #Changing the None values into -1
+                self.lists[k] = -1
+            k+=1
+        print ("self list", self.lists)
+
+    def distanceFrom(self, start):
+        # Returns the distance from the cell at position start to the next non-empty cell (the next car).
+        pass
+        
+    def updateRule(self):
+
+        updated=[]* len(self.lists)
+        for i in self.lists:
+            if i == -1:
+                updated.append(-1)
+        
+        distances = []
+        for i in range(len(self.lists)):
+            if self.lists[i] != -1:
+                count = i + 1
+                while self.lists[count % self.road_length]==-1:
+                    count +=1
+                distance = count - i
+            else:
+                distance = None
+            distances.append(distance)
+                    
+
+            #elif #statement
+            #    i +=1 #increase
+            #elif #statement
+            #    i -=1 #decrease
+                
+#if there are i + 1 steps empty in front   #PERIODIC BOUNDARY CONDITIONS 
+#i = i+1
+
+#if there are less than i + 1 empty in front 
+# i = i-1
+            #else:
+            #    updated.append(i)
+        print updated, distances
+        
+        
+sim1 = Trafficsimulation(10,3,8,0.9)
+sim1.displayParameters()
+sim1.assignStates()
+sim1.updateRule()
+
+
+x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
