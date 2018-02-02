@@ -13,3 +13,9 @@ You need to hire a new assistant. Every day an agency sends a new assistant for 
 If the assistant is better than your current assistant then you hire them. 
 (Assistant quality is uniformly distributed between 0 and 1.)
 This code is a simulation that calculates how many hires there will happen given the conditions.
+
+
+---------------------------- merge sort ----------------------------
+
+The code implements 2-way merge sort, 3-way merge sort and augmented merge sort,
+that also has insertion sort implemented within it
