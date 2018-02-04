@@ -19,3 +19,15 @@ This code is a simulation that calculates how many hires there will happen given
 
 The code implements 2-way merge sort, 3-way merge sort and augmented merge sort,
 that also has insertion sort implemented within it
+
+
+---------------------------- worse-shuffle ----------------------------
+
+This file contains an implementation of a worse shuffler on earth, that keeps shuffling randomly until it gets 
+a sorted list.
+
+---------------------------- median finder ----------------------------
+
+This is a function that finds an approximation of a median of a function by selecting numbers from a list at 
+random that fall in the percentile range
+
