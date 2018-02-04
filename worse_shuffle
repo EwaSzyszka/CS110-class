@@ -1,0 +1,36 @@
+def worse_shuffler(shuffle_me):
+    
+    while shuffle_me != sorted(shuffle_me):
+        np.random.shuffle(shuffle_me)
+        
+    else:
+        print ("done", shuffle_me)
+        
+worse_shuffler([2,1,1,5,3,1])
+
+
+import random
+
+listt = (1,3,100,23,40)
+quantity = random.random()/2
+
+def median_finder (lis, quantity):
+    
+    left_bound = 50-quantity/0.02
+    right_bound = 50 +quantity/ 0.02
+    rand = random.choice(lis)
+    
+    print left_bound, right_bound, rand
+    
+    
+    if left_bound<rand <right_bound:
+        print("Approximate median is", rand)
+    
+    while rand>right_bound or rand<left_bound:
+        rand = random.choice(lis)
+        if left_bound<rand <right_bound:
+            print("Approximate median is",rand)
+            break
+            
+    
+median_finder(listt, quantity)
