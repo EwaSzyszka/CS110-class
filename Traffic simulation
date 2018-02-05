@@ -9,25 +9,27 @@ class Trafficsimulation:
         self.density = density
         self.max_velo = max_velo
         self.prob_slow_down = prob_slow_down
-        self.lists = [None] * road_length
+        self.lists = [-1] * road_length
+        self.next_step = []*road_length
 
-    def assignStates(self):
+    def assignfirstStates(self):
         for i in range(self.density):
             self.lists[i] = randint(0, self.max_velo)
         np.random.shuffle(self.lists) #put the new values in random positions
         return self.lists
     
+    
     def updateRule(self):
         
         distances = []
         for i in range(len(self.lists)):
-            if self.lists[i] != None:
+            if self.lists[i] != -1:
                 count = i + 1
-                while self.lists[count % self.road_length]== None:
+                while self.lists[count % self.road_length]== -1 :
                     count +=1
                 distance = (count - i)-1
             else:
-                distance = None
+                distance = -1
             distances.append(distance)
         print ("Initial velocities", self.lists)
         print ("Distances",distances)
@@ -36,15 +38,18 @@ class Trafficsimulation:
         new_velocity = []
         for i in range(len(distances)):
               
-            if distances[i]== None:
-                new_velocity.append(-1) #corr
-            if distances[i]==0:
-                new_velocity.append(0) #corr
-            if distances[i]> self.lists[i]:
-                new_velocity.append(self.lists[i]+1)
-            if distances[i]<self.lists[i] and distances[i]!= None or 0:                
-                new_velocity.append(int(self.lists[i])- int(distances[i]))   
-            if distances[i] == self.lists[i] and distances[i]!= None or 0:
+            if distances[i]== -1:
+                new_velocity.append(-1) 
+            elif distances[i]==0:
+                new_velocity.append(0) 
+            elif distances[i]> self.lists[i]:
+                if self.max_velo > self.lists[i]:
+                    new_velocity.append(self.lists[i]+1)
+                else:
+                    new_velocity.append(self.lists[i])
+            elif distances[i]<self.lists[i]:
+                new_velocity.append(distances[i])   
+            elif distances[i] == self.lists[i] and distances[i]!= -1 or 0:
                 new_velocity.append(self.lists[i])
     
         print ("New velocities", new_velocity) 
@@ -57,10 +62,17 @@ class Trafficsimulation:
             
         print ("Next step", next_step)
         print (''.join('.' if x == -1  else str(x)  for x  in next_step))
-          
+        return next_step
+        
+    def assignStates(self, next_step):
+        for i in range(len(next_step)):
+            self.lists[i] = next_step[i]
+        return self.lists
         
 
 sim1 = Trafficsimulation(10,2,5,0.5)
-
-sim1.assignStates()
-sim1.updateRule()
+sim1.assignfirstStates()
+sim1.lists = [-1, 3, -1, 1, -1, -1, -1, -1, -1, -1]
+for i in range(10):
+    x = sim1.updateRule()
+    sim1.assignStates(x)
