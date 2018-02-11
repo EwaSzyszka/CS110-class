@@ -1,0 +1,37 @@
+#ladder graph
+G=nx.ladder_graph(5)
+nx.draw(G)
+plt.show()
+
+#barbel graph
+G=nx.barbell_graph(2,20)
+nx.draw(G)
+plt.show()
+
+#Hypercube graph
+G=nx.hypercube_graph(4)
+nx.draw(G)
+plt.show()
+
+#Drawing a wheel graph
+
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
+
+hundred_numbers = []
+for i in range(100):
+    z = random.randint(1,100)
+    hundred_numbers.append(z)
+
+g = nx.Graph()
+g.add_nodes_from(hundred_numbers)
+
+j = 0
+for j in range(100):
+    g.add_edge(hundred_numbers[j], hundred_numbers[1])
+    
+
+nx.draw(g)
+nx.draw_circular(g)
+plt.show()
