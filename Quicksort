@@ -1,0 +1,59 @@
+#Quicksort 
+import random
+
+#Sorting each small and BIG arrays that will be created after a split around the pivot
+def bubbleSort(alist):
+    for passnum in range(len(alist)-1,0,-1):
+        for i in range(passnum):
+            if alist[i]>alist[i+1]:
+                temp = alist[i]
+                alist[i] = alist[i+1]
+                alist[i+1] = temp
+
+#merging sorted BIG and small arrays               
+def merge(a,b): 
+    i = 0
+    j = 0
+
+    sorted_array = []
+    while i + j < len(a) + len(b):
+
+        l = a[i] if i < len(a) else 1e10
+        r = b[j] if j < len(b) else 1e10
+        if l < r:
+            sorted_array.append(a[i])
+            i +=1
+        else:
+            sorted_array.append(b[j])
+            j +=1
+        
+    return sorted_array
+
+#dividing an array around the pivot
+def Quicksort(array):
+    small = []
+    BIG = []
+    pivot = random.choice(array)
+    array.remove(pivot)
+    
+    for i in range(len(array)):
+        if array[i] <= pivot:
+              small.append(array[i])
+        else:
+            BIG.append(array[i])
+    
+    print ("pivot", pivot),("small", small),("big", BIG)
+    
+    #sorting the small and BIG arrays
+    bubbleSort(small)
+    bubbleSort(BIG)
+    #merging sorted arrays
+    without_pivot =  merge(small,BIG)
+    
+    print without_pivot
+    
+    #inserting pivot
+    without_pivot.insert(pivot-1,pivot)
+    print without_pivot, pivot 
+    
+Quicksort([1,4,3,2])
