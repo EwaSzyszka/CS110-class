@@ -1,5 +1,7 @@
 import numpy as np
 from random import randint
+%matplotlib inline
+import matplotlib.pyplot as plt
 
 class Trafficsimulation:
 
@@ -32,6 +34,8 @@ class Trafficsimulation:
                 distance = -1
             distances.append(distance)
         print ("Initial velocities", self.lists)
+        plt.imshow([self.lists], aspect= 'equal', interpolation='none',origin='lower')
+        plt.show()
         print ("Distances",distances)
         
         
@@ -49,7 +53,7 @@ class Trafficsimulation:
                     new_velocity.append(self.lists[i])
             elif distances[i]<self.lists[i]:
                 new_velocity.append(distances[i])   
-            elif distances[i] == self.lists[i] and distances[i]!= -1 or 0:
+            elif distances[i] == self.lists[i]:
                 new_velocity.append(self.lists[i])
     
         print ("New velocities", new_velocity) 
@@ -61,8 +65,11 @@ class Trafficsimulation:
                 next_step[(new_velocity[i]+ i)%len(new_velocity)]  = new_velocity[i]
             
         print ("Next step", next_step)
+        plt.imshow([next_step], aspect= 'equal', interpolation='none',origin='lower')
+        plt.show()
         print (''.join('.' if x == -1  else str(x)  for x  in next_step))
         return next_step
+
         
     def assignStates(self, next_step):
         for i in range(len(next_step)):
