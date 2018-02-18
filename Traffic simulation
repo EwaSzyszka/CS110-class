@@ -1,10 +1,13 @@
+#Visualization of the traffic jam on a single lane using "1 - 0 - ." notation
+
+import random
 import numpy as np
 from random import randint
-%matplotlib inline
-import matplotlib.pyplot as plt
+
 
 class Trafficsimulation:
-
+    
+    """This is initialization of variables"""
     def __init__(self, road_length, density, max_velo, prob_slow_down):
 
         self.road_length = road_length
@@ -14,15 +17,118 @@ class Trafficsimulation:
         self.lists = [-1] * road_length
         self.next_step = []*road_length
 
+    '''This method creates number of cars equal to 
+    density of cars with random velocity between 0 to max_velo'''        
+        
     def assignfirstStates(self):
+        
         for i in range(self.density):
             self.lists[i] = randint(0, self.max_velo)
         np.random.shuffle(self.lists) #put the new values in random positions
         return self.lists
     
+    '''This method first calculates the distances between next occupied cell, then
+    adjusts velocities and finally moves the cars on to their next positions'''
     
     def updateRule(self):
         
+        """Calculating the distances to the next car"""
+        distances = []
+        for i in range(len(self.lists)):
+            if self.lists[i] != -1:
+                count = i + 1
+                while self.lists[count % self.road_length]== -1 :
+                    count +=1
+                distance = (count - i)-1
+            else:
+                distance = -1
+            distances.append(distance)
+        
+        """Calculating next velocity"""
+        new_velocity = []
+        for i in range(len(distances)):
+              
+            if distances[i]== -1:
+                new_velocity.append(-1) 
+            elif distances[i]==0:
+                new_velocity.append(0) 
+            elif distances[i]> self.lists[i]:
+                if self.max_velo > self.lists[i]:
+                    new_velocity.append(self.lists[i]+1)
+                else:
+                    new_velocity.append(self.lists[i])
+            elif distances[i]<self.lists[i]:
+                new_velocity.append(distances[i])   
+            elif distances[i] == self.lists[i]:
+                new_velocity.append(self.lists[i])
+         
+        """Moving the cars with new velocities to the correct positions"""
+        next_step = [-1]*len(new_velocity) 
+        
+        for i in range(len(new_velocity)):
+            if new_velocity[i] != -1:
+                next_step[(new_velocity[i]+ i)%len(new_velocity)]  = new_velocity[i]
+
+        for i in range (len(next_step)):
+            if random.random() < self.prob_slow_down and next_step[i]!= -1 and next_step[i]!= 0 :
+                next_step[i] = next_step[i]-1
+                #print("random slow")                       
+                
+        print (''.join('.' if x == -1  else str(x)  for x  in next_step))
+        return next_step
+
+    """This method assigned the values that we obtained in next step  
+    to initial values in the next iteration"""
+  
+    def assignStates(self, next_step):
+        for i in range(len(next_step)):
+            self.lists[i] = next_step[i]
+        return self.lists  
+
+sim1 = Trafficsimulation(50,2,5,0.5)
+sim1.assignfirstStates()
+for i in range(10):
+    x = sim1.updateRule()
+    sim1.assignStates(x)
+    
+
+
+
+
+#Visualization of the traffic jam on a single lane using color coded notation + more detailed information
+
+import numpy as np
+from random import randint
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+class Trafficsimulation:
+
+    """This is initialization of variables"""
+    def __init__(self, road_length, density, max_velo, prob_slow_down):
+
+        self.road_length = road_length
+        self.density = density
+        self.max_velo = max_velo
+        self.prob_slow_down = prob_slow_down
+        self.lists = [-1] * road_length
+        zeros = []
+
+    '''This method creates number of cars equal to 
+    density of cars with random velocity between 0 to max_velo'''         
+        
+    def assignfirstStates(self):
+        for i in range(self.density):
+            self.lists[i] = randint(0, self.max_velo)   
+        np.random.shuffle(self.lists) #put the new values in random positions
+        return self.lists
+
+    '''This method first calculates the distances between next occupied cell, then
+    adjusts velocities and finally moves the cars on to their next positions'''    
+    
+    def updateRule(self):
+        
+        """Calculating the distances to the next car"""
         distances = []
         for i in range(len(self.lists)):
             if self.lists[i] != -1:
@@ -34,11 +140,9 @@ class Trafficsimulation:
                 distance = -1
             distances.append(distance)
         print ("Initial velocities", self.lists)
-        plt.imshow([self.lists], aspect= 'equal', interpolation='none',origin='lower')
-        plt.show()
         print ("Distances",distances)
         
-        
+        """Calculating next velocity"""
         new_velocity = []
         for i in range(len(distances)):
               
@@ -57,29 +161,468 @@ class Trafficsimulation:
                 new_velocity.append(self.lists[i])
     
         print ("New velocities", new_velocity) 
-        
+
+        """Moving the cars with new velocities to the correct positions"""
         next_step = [-1]*len(new_velocity) 
         for i in range(len(new_velocity)):
 
             if new_velocity[i] != -1:
                 next_step[(new_velocity[i]+ i)%len(new_velocity)]  = new_velocity[i]
-            
-        print ("Next step", next_step)
+        
+        for i in range (len(next_step)):
+            if random.random() < self.prob_slow_down and next_step[i]!= -1 and next_step[i]!= 0 :
+                next_step[i] = next_step[i]-1
+                #print("random slow")
+              
+        print ("Next step", next_step) #this one includes the random slow down 
+        zeros.append(next_step.count(0))
+        print ("number of people in traffic", np.mean(zeros))  #calculating number of zeros 
+        print ("  ")
         plt.imshow([next_step], aspect= 'equal', interpolation='none',origin='lower')
         plt.show()
-        print (''.join('.' if x == -1  else str(x)  for x  in next_step))
         return next_step
 
-        
+    """This method assigned the values that we obtained in next step  
+    to initial values in the next iteration"""    
+    
     def assignStates(self, next_step):
         for i in range(len(next_step)):
             self.lists[i] = next_step[i]
         return self.lists
-        
-
-sim1 = Trafficsimulation(10,2,5,0.5)
+      
+sim1 = Trafficsimulation(20,3,5,0.5)
 sim1.assignfirstStates()
-sim1.lists = [-1, 3, -1, 1, -1, -1, -1, -1, -1, -1]
+zeros = []
+
 for i in range(10):
     x = sim1.updateRule()
     sim1.assignStates(x)
+    
+    
+    
+#Visualization of the traffic jam on a double lane using "1 - 0 - ." notation
+
+import numpy as np
+from random import randint
+
+class Trafficsimulation:
+    
+    '''This is an initialization of variables'''
+    def __init__(self, road_length, density, max_velo, prob_slow_down, prob_slow_down_line_two):
+
+        self.road_length = road_length
+        self.density = density
+        self.max_velo = max_velo
+        self.prob_slow_down = prob_slow_down
+        self.prob_slow_down_line_two = prob_slow_down_line_two
+        self.lists = [-1] * road_length
+        self.lists_two = [-1] * road_length
+
+    '''This method creates number of cars equal to 
+    density of cars with random velocity between 0 to max_velo'''
+    
+    def assignfirstStates(self):  
+        
+        for i in range(self.density):
+            self.lists[i] = randint(0, self.max_velo)
+            self.lists_two[i] = randint(0, self.max_velo)
+        np.random.shuffle(self.lists_two)
+        np.random.shuffle(self.lists) #put the new values in random positions
+        return self.lists
+        return self.lists_two   
+    
+    '''This method first calculates the distances between next occupied cell, then
+    determines which cars are eligible for a lane switch, performes the switch and adjusts 
+    velocities and finally moves the cars on to their next positions'''
+    
+    def updateRule(self):
+        
+        distances = []
+        distances_two = []
+        
+        '''calculating the distances for line 1'''
+        for i in range(len(self.lists)):
+            if self.lists[i] != -1:
+                count = i + 1
+                while self.lists[count % self.road_length]== -1 :
+                    count +=1
+                distance = ((count-i)-1)
+            else:
+                distance = -1
+            distances.append(distance)
+            
+        '''calculating the distances for line 2'''   
+        for i in range(len(self.lists_two)):
+            if self.lists_two[i] != -1:
+                count2 = i + 1
+                while self.lists_two[count2 % self.road_length]== -1 :
+                    count2 +=1
+                distance2 = ((count2-i) -1)
+            else:
+                distance2 = -1
+            distances_two.append(distance2)
+            
+############## CHANGING POSITIONS ############## 
+
+        new_position = [-1]*self.road_length
+        new_position_two = [-1]*self.road_length
+
+        
+        distance_ahead = 1
+        distance_ahead_two = 1
+        
+
+        for i in range(self.road_length):
+            
+            '''Changing position from line 1 to line 2''' 
+            if self.lists[i] != -1:
+                new_position[i] = self.lists[i]   
+                if distances[i] < new_position[i]+1:
+                    
+                    '''check if the other lane at index i is empty 
+                    and there is enough space to the back on another lane'''
+                    if (distances_two[i] == -1 and distances_two[i-1] == -1 and distances_two[i-2] == -1
+                       and distances_two[i-3] == -1 and distances_two[i-4] and distances_two[i-5] == -1):
+
+                        '''check if front of other has velocity +1 spaces empty'''
+                        while self.lists_two[(i+ distance_ahead) % self.road_length] == -1:
+                            distance_ahead +=1
+                        if distance_ahead >= new_position[i] + 1:
+                            new_position_two[i] = new_position[i]
+                            #print ("I changed")
+                            new_position[i] = -1                                     
+                
+                
+            '''Changing position from line 2 to line 1'''    
+            if self.lists_two[i]!=-1:
+                new_position_two[i] = self.lists_two[i]
+                if distances_two[i] < new_position_two[i]+1: 
+                    
+                    '''check if the other lane at index i is empty 
+                    and there is enough space to the back on another lane'''
+                    if (distances[i] == -1 and distances[i-1] == -1 and distances[i-2] == -1
+                       and distances[i-3] == -1 and distances[i-4] and distances[i-5] == -1):
+
+                        '''check if front of other has velocity +1 spaces empty'''
+                        while self.lists[(i+ distance_ahead_two) % self.road_length] == -1:
+                            distance_ahead_two +=1
+                        if distance_ahead_two >= new_position_two[i] + 1:
+                            new_position[i] = new_position_two[i]
+                            #print ("I changed")
+                            new_position_two[i] = -1
+
+
+############## UPDATE VELOCITIES ##############  
+        
+        new_velocity = []  
+        new_velocity_two = []
+        
+        """updating velocities for lane 1""" 
+        for i in range(len(distances)):  
+              
+            if distances[i]== -1:
+                new_velocity.append(-1) 
+            elif distances[i]==0:
+                new_velocity.append(0) 
+            elif distances[i]> new_position[i]:
+                if self.max_velo > new_position[i]:
+                    new_velocity.append(new_position[i]+1)
+                else:
+                    new_velocity.append(new_position[i])
+            elif distances[i]<new_position[i]:
+                new_velocity.append(distances[i])   
+            elif distances[i] == new_position[i]:
+                new_velocity.append(new_position[i])
+                
+        """updating velocities for lane 2"""       
+        for i in range(len(distances_two)): 
+              
+            if distances_two[i]== -1:
+                new_velocity_two.append(-1) 
+            elif distances_two[i]==0:
+                new_velocity_two.append(0) 
+            elif distances_two[i]> new_position_two[i]:
+                if self.max_velo > new_position_two[i]:
+                    new_velocity_two.append(new_position_two[i]+1)
+                else:
+                    new_velocity_two.append(new_position_two[i])
+            elif distances_two[i]<new_position_two[i]:
+                new_velocity_two.append(distances_two[i])   
+            elif distances_two[i] == new_position_two[i]:
+                new_velocity_two.append(new_position_two[i])
+    
+    
+############## MOVE POSITIONS ##############  
+
+        next_step = [-1]*self.road_length
+        next_step_two = [-1]*self.road_length        
+        
+        """Updating velocity for lane 1"""
+        for i in range(len(new_velocity)):
+            if new_velocity[i] != -1:
+                next_step[(new_velocity[i]+ i)%len(new_velocity)]  = new_velocity[i]
+        
+        """Updating velocity for lane 2"""
+        for i in range(len(new_velocity_two)):   
+            if new_velocity_two[i] != -1:
+                next_step_two[(new_velocity_two[i]+ i)%len(new_velocity_two)]  = new_velocity_two[i]
+                
+        """Moving velocities in lane 1"""
+        for i in range (len(next_step)):
+            if random.random() < self.prob_slow_down and next_step[i]!= -1 and next_step[i]!= 0 :
+                next_step[i] = next_step[i]-1  
+                #print("I slowed down - line 1")
+
+        """Moving velocities in lane 2"""                
+        for i in range (len(next_step_two)):
+            if random.random() < self.prob_slow_down_line_two and next_step_two[i]!= -1 and next_step_two[i]!= 0 :
+                next_step_two[i] = next_step_two[i]-1  
+                #print("I slowed down - line 2")
+                
+        print (''.join('.' if x == -1  else str(x)  for x  in next_step))  #first line
+        print (''.join('.' if x == -1  else str(x)  for x  in next_step_two))  #second line
+        
+        return next_step, next_step_two
+    
+    """This method assigned the values that we obtained in next step and next step two 
+    to initial values and initial values two in the next iteration"""
+    
+    def assignStates(self, next_step, next_step_two):
+        for i in range(len(next_step)):
+            self.lists[i] = next_step[i]
+            self.lists_two[i] = next_step_two[i]
+        print (" ")
+
+sim1 = Trafficsimulation(10,6,5,0.5, 0.5)
+sim1.assignfirstStates()
+
+for i in range(10):
+    x, y = sim1.updateRule()
+    sim1.assignStates(x, y)    
+    
+    
+    
+    
+    
+    
+#Visualization of the traffic jam on a double lane using color coded notation + more detailed information
+
+import numpy as np
+from random import randint
+
+class Trafficsimulation:
+    
+    '''This is an initialization of variables'''
+    def __init__(self, road_length, density, max_velo, prob_slow_down, prob_slow_down_line_two):
+
+        self.road_length = road_length
+        self.density = density
+        self.max_velo = max_velo
+        self.prob_slow_down = prob_slow_down
+        self.prob_slow_down_line_two = prob_slow_down_line_two
+        self.lists = [-1] * road_length
+        self.lists_two = [-1] * road_length
+        zeros = []
+        zeros_two = []
+
+    '''This method creates number of cars equal to 
+    density of cars with random velocity between 0 to max_velo'''
+    
+    def assignfirstStates(self):  
+        
+        for i in range(self.density):
+            self.lists[i] = randint(0, self.max_velo)
+            self.lists_two[i] = randint(0, self.max_velo)
+        np.random.shuffle(self.lists_two)
+        np.random.shuffle(self.lists) #put the new values in random positions
+        return self.lists
+        return self.lists_two   
+    
+    '''This method first calculates the distances between next occupied cell, then
+    determines which cars are eligible for a lane switch, performes the switch and adjusts 
+    velocities and finally moves the cars on to their next positions'''
+    
+    def updateRule(self):
+        
+        distances = []
+        distances_two = []
+        
+        '''calculating the distances for line 1'''
+        for i in range(len(self.lists)):
+            if self.lists[i] != -1:
+                count = i + 1
+                while self.lists[count % self.road_length]== -1 :
+                    count +=1
+                distance = ((count-i)-1)
+            else:
+                distance = -1
+            distances.append(distance)
+            
+        '''calculating the distances for line 2'''   
+        for i in range(len(self.lists_two)):
+            if self.lists_two[i] != -1:
+                count2 = i + 1
+                while self.lists_two[count2 % self.road_length]== -1 :
+                    count2 +=1
+                distance2 = ((count2-i) -1)
+            else:
+                distance2 = -1
+            distances_two.append(distance2)
+        
+        print ("Distances",distances)
+        print ("Distances two",distances_two)
+ 
+
+         
+
+############## CHANGING POSITIONS ############## 
+
+        new_position = [-1]*self.road_length
+        new_position_two = [-1]*self.road_length
+
+        
+        distance_ahead = 1
+        distance_ahead_two = 1
+        
+
+        for i in range(self.road_length):
+            
+            '''Changing position from line 1 to line 2''' 
+            if self.lists[i] != -1:
+                new_position[i] = self.lists[i]   
+                if distances[i] < new_position[i]+1:
+                    
+                    '''check if the other lane at index i is empty 
+                    and there is enough space to the back on another lane'''
+                    if (distances_two[i] == -1 and distances_two[i-1] == -1 and distances_two[i-2] == -1
+                       and distances_two[i-3] == -1 and distances_two[i-4] and distances_two[i-5] == -1):
+
+                        '''check if front of other has velocity +1 spaces empty'''
+                        while self.lists_two[(i+ distance_ahead) % self.road_length] == -1:
+                            distance_ahead +=1
+                        if distance_ahead >= new_position[i] + 1:
+                            new_position_two[i] = new_position[i]
+                            #print ("I changed")
+                            new_position[i] = -1                                     
+                
+                
+            '''Changing position from line 2 to line 1'''    
+            if self.lists_two[i]!=-1:
+                new_position_two[i] = self.lists_two[i]
+                if distances_two[i] < new_position_two[i]+1: 
+                    
+                    '''check if the other lane at index i is empty 
+                    and there is enough space to the back on another lane'''
+                    if (distances[i] == -1 and distances[i-1] == -1 and distances[i-2] == -1
+                       and distances[i-3] == -1 and distances[i-4] and distances[i-5] == -1):
+
+                        '''check if front of other has velocity +1 spaces empty'''
+                        while self.lists[(i+ distance_ahead_two) % self.road_length] == -1:
+                            distance_ahead_two +=1
+                        if distance_ahead_two >= new_position_two[i] + 1:
+                            new_position[i] = new_position_two[i]
+                            #print ("I changed")
+                            new_position_two[i] = -1
+
+
+############## UPDATE VELOCITIES ##############  
+        
+        new_velocity = []  
+        new_velocity_two = []
+        
+        """updating velocities for lane 1""" 
+        for i in range(len(distances)):  
+              
+            if distances[i]== -1:
+                new_velocity.append(-1) 
+            elif distances[i]==0:
+                new_velocity.append(0) 
+            elif distances[i]> new_position[i]:
+                if self.max_velo > new_position[i]:
+                    new_velocity.append(new_position[i]+1)
+                else:
+                    new_velocity.append(new_position[i])
+            elif distances[i]<new_position[i]:
+                new_velocity.append(distances[i])   
+            elif distances[i] == new_position[i]:
+                new_velocity.append(new_position[i])
+                
+        """updating velocities for lane 2"""       
+        for i in range(len(distances_two)): 
+              
+            if distances_two[i]== -1:
+                new_velocity_two.append(-1) 
+            elif distances_two[i]==0:
+                new_velocity_two.append(0) 
+            elif distances_two[i]> new_position_two[i]:
+                if self.max_velo > new_position_two[i]:
+                    new_velocity_two.append(new_position_two[i]+1)
+                else:
+                    new_velocity_two.append(new_position_two[i])
+            elif distances_two[i]<new_position_two[i]:
+                new_velocity_two.append(distances_two[i])   
+            elif distances_two[i] == new_position_two[i]:
+                new_velocity_two.append(new_position_two[i])
+        
+        print ("New velocities",new_velocity)
+        print ("New velocities two",new_velocity_two)
+    
+
+############## MOVE POSITIONS ##############  
+
+        next_step = [-1]*self.road_length
+        next_step_two = [-1]*self.road_length        
+        
+        """Updating velocity for lane 1"""
+        for i in range(len(new_velocity)):
+            if new_velocity[i] != -1:
+                next_step[(new_velocity[i]+ i)%len(new_velocity)]  = new_velocity[i]
+        
+        """Updating velocity for lane 2"""
+        for i in range(len(new_velocity_two)):   
+            if new_velocity_two[i] != -1:
+                next_step_two[(new_velocity_two[i]+ i)%len(new_velocity_two)]  = new_velocity_two[i]
+                
+        """Moving velocities in lane 1"""
+        for i in range (len(next_step)):
+            if random.random() < self.prob_slow_down and next_step[i]!= -1 and next_step[i]!= 0 :
+                next_step[i] = next_step[i]-1  
+                #print("I slowed down - line 1")
+
+        """Moving velocities in lane 2"""                
+        for i in range (len(next_step_two)):
+            if random.random() < self.prob_slow_down_line_two and next_step_two[i]!= -1 and next_step_two[i]!= 0 :
+                next_step_two[i] = next_step_two[i]-1  
+                #print("I slowed down - line 2")
+                
+        print ("Next step", next_step)
+        print ("Next step 2", next_step_two)
+        
+        zeros.append(next_step.count(0))
+        print ("Lane 1: number of people in traffic", np.mean(zeros)) 
+        zeros_two.append(next_step_two.count(0))
+        print ("Lane 2: number of people in traffic", np.mean(zeros_two)) 
+        
+        plt.imshow([next_step], aspect= 'equal', interpolation='none',origin='lower')
+        plt.show()
+        plt.imshow([next_step_two], aspect= 'equal', interpolation='none',origin='lower')
+        plt.show()
+        return next_step, next_step_two
+    
+    """This method assigned the values that we obtained in next step and next step two 
+    to initial values and initial values two in the next iteration"""
+    
+    def assignStates(self, next_step, next_step_two):
+        for i in range(len(next_step)):
+            self.lists[i] = next_step[i]
+            self.lists_two[i] = next_step_two[i]
+        print (" ")
+
+sim1 = Trafficsimulation(10,2,5,0.5, 0.7)
+sim1.assignfirstStates()
+zeros = []
+zeros_two = []
+
+for i in range(10):
+    x, y = sim1.updateRule()
+    sim1.assignStates(x, y)    
