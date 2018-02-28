@@ -1,0 +1,51 @@
+import networkx as nx
+import numpy as np
+import random
+import pandas as pd
+
+g = nx.erdos_renyi_graph(30, 0.05, directed=True, seed=123)
+nx.draw(g, pos=nx.kamada_kawai_layout(g))
+nx.pagerank(g)
+
+#start surfer on a random node
+node = np.random.choice(g.nodes())
+path = []
+path.append(node)
+
+for i in range(60):
+    if random.uniform(0, 1) < 0.85: #0.5 is the probability that we set 
+        if len(list(g.neighbors(node))) != 0:
+            node = np.random.choice(list(g.neighbors(node)))
+            path.append(node)
+        else:
+            node = np.random.choice(g.nodes())
+            path.append(node)
+    else:
+        node = np.random.choice(g.nodes())
+        path.append(node)
+
+print (" ")
+print("Original array:")
+print(path)
+
+unique_elements, counts_elements = np.unique(path, return_counts=True)
+print(" ")
+print("Frequency table:")
+frequency_table = (np.asarray((unique_elements, counts_elements)))
+names = frequency_table[0]
+values = frequency_table[1]
+for n, v in zip(names, values):
+    print("{} = {}".format(n, v))
+
+print(" ")
+print("Total number of visits: ")
+print len(path) 
+print(" ")
+print("Page Rank:")
+for n, v in zip(names, values):
+    print("{} = {}".format(n, v/61.0))
+
+print (" ")
+print ("Differences")
+for n, v in zip(names, values):    
+     print("{} = {}".format(n,v/61.0 - nx.pagerank(g)[v]))   
