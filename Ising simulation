@@ -35,5 +35,5 @@ print ("Cell energy {}".format(cell_energy))
 for i in range(5):
     print ("Temperature {}K at the cell energy {}".format(i,cell_energy))
     #changing the sign of the central cell with probability
-    if random.uniform(0,1) < math.e**(2*cell_energy/i):
+    if math.e**(2*cell_energy/i)<1:
         print ("The index fliped to {}".format(-flat_array[index]))
