@@ -1,0 +1,39 @@
+import numpy
+import random
+
+def f(x):
+    Z = 24.44321494051954
+    if abs(x) > 7:
+        return 0
+    elif abs(x) > 3:
+        return 3 * (1 * (x / 7) ** 2) ** 0.5 / Z
+    elif abs(x) > 1:
+        return ((3 - abs(x)) / 2 - 3/7 * 10**0.5 * ((3 - x**2 + 2*abs(x))**0.5 - 2)) / Z
+    elif abs(x) > 0.75:
+        return (9 - 8 * abs(x)) / Z
+    elif abs(x) > 0.5:
+        return (3 * abs(x) + 0.75) / Z
+    else:
+        return 2.25 / Z
+       
+#start at x0 and loop multilple times
+
+X0 = 1. 
+values_of_x = [X0]
+
+
+for i in range(10000):
+    proposal = numpy.random.normal(loc=X0, scale=2.0, size=None)
+    if f(proposal) > f(X0):
+        X0 = proposal
+        values_of_x.append(X0)
+
+    elif random.uniform(0,1) < f(proposal)/f(X0): #min(1,f(proposal)/f(X0))
+        X0 = proposal
+        values_of_x.append(X0)
+
+
+
+plt.hist(values_of_x, 1000, facecolor='blue', alpha=0.5)
+plt.show()
+     
