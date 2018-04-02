@@ -1,0 +1,70 @@
+import numpy as np
+import pylab as P
+from scipy import stats  
+import matplotlib.pylab as plt
+
+#--------------------------------------CONSTRAINED RANDOM WALK WTH A -4 REFLECTANCE---------------------------------------
+
+def random_constrained_walk(step):
+    position = 0
+    x = []
+    for i in range(step):
+        random_num = np.random.uniform(0,1)
+        if random_num <0.5:
+            #walk to the left
+            position +=1
+        elif random_num >0.5 and position <= -4:
+            position +=1
+        else:
+            position -=1
+        x.append(position)
+    return x
+
+P.hist(random_constrained_walk(100),normed = True, histtype='stepfilled')
+xmin, xmax = -4, max(random_constrained_walk(100))  
+lnspc = np.linspace(xmin, xmax, len(random_constrained_walk(100)))
+
+# normal distribution 
+m, s = stats.norm.fit(random_constrained_walk(100)) # get mean and standard deviation  
+pdf_g = stats.norm.pdf(lnspc, m, s) # now get theoretical values in our interval  
+plt.plot(lnspc, pdf_g, label="Norm") # plot it
+
+P.figure()
+P.show()
+
+#---------------------------CONSTRAINED RANDOM WALK WITH -4 REFLECTANCE AND +6 P(0.75) REFLECTANCE-------------------------
+
+def random_constrained_walk(step):
+    position = 0
+    x = []
+    for i in range(step):
+        random_num = np.random.uniform(0,1)
+        if random_num <0.5:
+            #walk to the left
+            position +=1
+        elif random_num >0.5 and position <= -4:
+            position +=1
+
+        elif random_num <0.5 and position == 6: #about to increase
+            if np.random.choice(numpy.arange(0, 2), p=[0.25, 0.75])== 0:
+                position +=1
+            else:
+                position -=1
+
+        else:
+            position -=1
+        x.append(position)
+    return x
+
+P.hist(random_constrained_walk(100),normed = True, histtype='stepfilled')
+xmin, xmax = -4, max(random_constrained_walk(100))  
+lnspc = np.linspace(xmin, xmax, len(random_constrained_walk(100)))
+
+# normal distribution 
+m, s = stats.norm.fit(random_constrained_walk(100)) # get mean and standard deviation  
+pdf_g = stats.norm.pdf(lnspc, m, s) # now get theoretical values in our interval  
+plt.plot(lnspc, pdf_g, label="Norm") # plot it
+
+P.figure()
+P.show()
+
