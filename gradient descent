@@ -1,0 +1,26 @@
+cur_x = 1 # The algorithm starts at x=6 and y = 6
+cur_y = 3
+gamma = 0.0001 # step size multiplier
+precision = 0.001
+previous_step_size_x = 1/precision; # some large value
+previous_step_size_y = 1/precision
+
+partial_x = lambda x,y: 3*(x**2-y)
+partial_y = lambda x,y: 3*(y**2) - 3*x
+
+while previous_step_size_x > precision and previous_step_size_y > precision:
+    prev_x = cur_x
+    prev_y = cur_y
+    cur_x += gamma * partial_x(prev_x,prev_y)
+    cur_y += gamma * partial_y(prev_x,prev_y)
+    previous_step_size_x = abs(cur_x - prev_x)
+    previous_step_size_y = abs(cur_y - prev_y)
+    print previous_step_size_y,previous_step_size_x,precision
+
+print("The local minimum occurs at %f" % cur_x,cur_y)
+
+'''
+f(x,y)=4+x^(3)+y^(3)-3x*y
+partial_x = 3(x**2-y)
+partial_y = 3*y**2 - 3*x
+'''
