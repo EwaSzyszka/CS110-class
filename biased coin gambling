@@ -1,0 +1,35 @@
+import numpy
+
+def gambling(start_money):
+    playing = raw_input("Do you want to make another bet (y/n) ? ")
+    if playing == 'y':
+        if start_money != 0:
+            print ("Your balance is", start_money)
+            bet = input("How much do you want to gamble? ") #setting the bet amount that cannot exceed start_money
+            while bet > start_money:
+                bet = input("Place a smaller bet ")
+            T_or_H = raw_input("What is your bet --> T or H? ")
+            coin = numpy.random.choice(numpy.arange(0, 2), p=[0.6, 0.4]) #H = 1 T = 0 
+            if T_or_H == 'H' and coin == 1:
+                print ("win")
+                start_money += bet
+                print start_money 
+                gambling(start_money)
+                
+            elif T_or_H == 'T' and coin == 0:
+                print ("win")
+                start_money += bet
+                print start_money  
+                gambling(start_money)
+                
+            else:
+                print("loose")
+                start_money -= bet
+                print start_money
+                gambling(start_money)
+        
+    else:
+        print ("You end the game with ", start_money)
+        
+            
+gambling(20) 
