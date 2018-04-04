@@ -1,7 +1,12 @@
 import numpy
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+%matplotlib inline
+
+balance_change = []
 
 def gambling(start_money):
-    playing = raw_input("Do you want to make another bet (y/n) ? ")
+    playing = raw_input("Do you want to make a bet (y/n) ? ")
     if playing == 'y':
         if start_money != 0:
             print ("Your balance is", start_money)
@@ -14,22 +19,30 @@ def gambling(start_money):
                 print ("win")
                 start_money += bet
                 print start_money 
+                balance_change.append(start_money)
                 gambling(start_money)
                 
             elif T_or_H == 'T' and coin == 0:
                 print ("win")
                 start_money += bet
                 print start_money  
+                balance_change.append(start_money)
                 gambling(start_money)
                 
             else:
                 print("loose")
                 start_money -= bet
                 print start_money
+                balance_change.append(start_money)
                 gambling(start_money)
         
     else:
         print ("You end the game with ", start_money)
-        
-            
+        plt.plot(range(1,len(balance_change)+1),balance_change)
+        blue_patch = mpatches.Patch(color = 'blue', label = 'change in balance')
+        plt.legend(handles=[blue_patch])
+        plt.xlabel("Number of itterations")
+        plt.ylabel("Current balance")
+        plt.show()
+                 
 gambling(20) 
