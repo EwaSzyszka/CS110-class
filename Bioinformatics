@@ -1,0 +1,212 @@
+#----------------------SEQUENCES USED FOR COMPARISONS----------------------
+
+sequence = (0,'TTCTACGGGGGGAGACCTTTACGAATCACACCGGTCTTCTTTGTTCTAGCCGCTCTTTTTCATCAGTTGCAGCTAGTGCATAATTGCTCACAAACGTATC'), (1,'TCTACGGGGGGCGTCATTACGGAATCCACACAGGTCGTTATGTTCATCTGTCTCTTTTCACAGTTGCGGCTTGTGCATAATGCTCACGAACGTATC'), (2,'TCTACGGGGGGCGTCTATTACGTCGCCAACAGGTCGTATGTTCATTGTCATCATTTTCATAGTTGCGGCCTGTGCGTGCTTACGAACGTATTCC'), (3,'TCCTAACGGGTAGTGTCATACGGAATCGACACGAGGTCGTATCTTCAATTGTCTCTTCACAGTTGCGGCTGTCCATAAACGCGTCCCGAACGTTATG'), (4,'TATCAGTAGGGCATACTTGTACGACATTCCCCGGATAGCCACTTTTTTCCTACCCGTCTCTTTTTCTGACCCGTTCCAGCTGATAAGTCTGATGACTC'), (5,'TAATCTATAGCATACTTTACGAACTACCCCGGTCCACGTTTTTCCTCGTCTTCTTTCGCTCGATAGCCATGGTAACTTCTACAAAGTTC'), (6,'TATCATAGGGCATACTTTTACGAACTCCCCGGTGCACTTTTTTCCTACCGCTCTTTTTCGACTCGTTGCAGCCATGATAACTGCTACAAACTTC')
+print sequence[0][1] 
+print sequence[1][1]
+print sequence[2][1]
+print sequence[3][1]
+print sequence[4][1]
+print sequence[5][1]
+print sequence[6][1]
+
+#    --------    Python code to give the length of the longest common subsequence for two strings.   -------- 
+   
+def LCS(sequence1,sequence2): 
+    '''LCS from right to left '''
+    if sequence1 == '' or sequence2 == '': #Termination of the recursion 
+        return []
+    if sequence1[-1] == sequence2[-1]:
+        return [sequence1[-1]] + LCS(sequence1[0:len(sequence1)-1],sequence2[0:len(sequence2)-1])
+    else:
+        return max(LCS(sequence1,sequence2[0:len(sequence2)-1]),LCS(sequence1[0:len(sequence1)-1],sequence2),key=len)
+
+len(LCS('TTCTACGGGGGGAGACCTTTAC',"AAGAGTCG"))
+
+#   --------    Table of the lengths of the longest common subsequences for every pair of strings   --------    
+  
+tls.set_credentials_file(username='EwaSzyszka', api_key='xcVmZTFbJYpWuWmYJByJ')
+
+import plotly.tools as tls
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+trace = go.Table(
+    header=dict(values=['','Sequence 1', 'Sequence 2', 'Sequence 3', 'Sequence 4', 'Sequence 5', 'Sequence 6','Sequence 7']),
+    cells=dict(values=[['Sequence 1', 'Sequence 2', 'Sequence 3', 'Sequence 4', 'Sequence 5', 'Sequence 6', 'Sequence 7'],['100', '82', '73', '72','72','70','80'],
+                       ['82', '100', '83', '81','67','65','70'],['73', '83', '100', '73'],['72', '81', '73', '0'],['72', '67', '0', '0'],['70', '65', '0', '0'], ['80', '70', '0', '0']]))
+data = [trace] 
+py.iplot(data, filename = 'basic_table')
+
+'''
+  --------    Estimating probability of MUTATION   --------   
+   
+   Because insertions and deletions can happen at any point of the DNA string, first one needs to 
+   isolate the impact of the deletions and insertions on our observations of the impact of mutations,
+   thus first I align the two DNA base strings using Needleman-Wunsch global alignment algorithm. 
+   Once the strings are aligned, I calculate the Hamming distance, which gives the information about
+   how many bases at a particular index in two strings are equal. Next, I took the average of the 
+   length of the strings given for comparizon and divided each Hamming distance by this number.
+   The final step was to substract the obtained value from 1 to obtain the estimated probability 
+   of mutation. I repeate the proces for every possible combination of the strings given for comparison
+   and returned the average of mutation probabilities, which was equal to 0.257142857143
+
+'''
+
+def hamming_distance(s1, s2):
+    same_symbol_count = 0
+    if len(s1) == len(s2):  
+        for i in zip(s1,s2):
+            if i[0] == i[1]:
+                same_symbol_count +=1
+        print same_symbol_count
+        
+    elif len(s1)>len(s2):
+        for i in range(len(s1)-len(s2)):
+            s2= s2+ ' '
+        hamming_distance(s1,s2)
+        
+    elif len(s2)>len(s1):
+        for i in range(len(s2)-len(s1)):
+            s1= s1+ ' '
+        hamming_distance(s1,s2)
+
+a = 'TTCTACGGGGGGAGACCTTTACGAATCACACCGGTCTTCTTTGT'
+b = 'GGGATCGTTGATCATCCCCTATAAT'
+hamming_distance(a, b)
+
+
+from itertools import combinations
+import nwalign as nw
+
+lst = ['TTCTACGGGGGGAGACCTTTACGAATCACACCGGTCTTCTTTGTTCTAGCCGCTCTTTTTCATCAGTTGCAGCTAGTGCATAATTGCTCACAAACGTATC','TCTACGGGGGGCGTCATTACGGAATCCACACAGGTCGTTATGTTCATCTGTCTCTTTTCACAGTTGCGGCTTGTGCATAATGCTCACGAACGTATC','TCTACGGGGGGCGTCTATTACGTCGCCAACAGGTCGTATGTTCATTGTCATCATTTTCATAGTTGCGGCCTGTGCGTGCTTACGAACGTATTCC','TCCTAACGGGTAGTGTCATACGGAATCGACACGAGGTCGTATCTTCAATTGTCTCTTCACAGTTGCGGCTGTCCATAAACGCGTCCCGAACGTTATG','TATCAGTAGGGCATACTTGTACGACATTCCCCGGATAGCCACTTTTTTCCTACCCGTCTCTTTTTCTGACCCGTTCCAGCTGATAAGTCTGATGACTC','TAATCTATAGCATACTTTACGAACTACCCCGGTCCACGTTTTTCCTCGTCTTCTTTCGCTCGATAGCCATGGTAACTTCTACAAAGTTC','TATCATAGGGCATACTTTTACGAACTCCCCGGTGCACTTTTTTCCTACCGCTCTTTTTCGACTCGTTGCAGCCATGATAACTGCTACAAACTTC']
+
+#--------------ALIGNMENT--------------
+
+for combo in combinations(lst, 2):  #for every possible combination
+    aligned = nw.global_align(combo[0],combo[1]) #align every element
+    #hamming_distance(str(aligned[0]),str(aligned[1]))# compute rge hamming distance #The values of HD array
+
+#----------HAMMING DISTANCE----------
+
+HD = [82., 73., 70., 72., 70.,80.,83.,81.,66.,63.,69.,73.,61.,58.,64.,62.,60.,63.,71.,82.,79.]
+
+#------------PROBABILITY-----------
+
+mutation_probability = []
+for i in HD:
+    percent_of_same_bases = i/95. #95 is average_string_length
+    mutation_probability.append(1 - percent_of_same_bases)
+    
+print sum(mutation_probability)/len(mutation_probability)
+    
+    
+   '''
+   --------    Estimating probability of INSERTION   --------
+
+   I used Longest Common Substring distance (LCSD), which returns the number equal to the 
+   minimum number of symbols that have to be removed in both strings to arrive at 
+   identical strings. I imported Common_patterns.py, which contained a code that
+   implements an algorithm that that enables to find all patterns within a string
+   details here: https://codereview.stackexchange.com/users/21993/5th. Next, I 
+   extended the code fro the Common_patterns.py and created a Longest Common
+   Substring distance implementation. I used the LCSD / length of the average string
+   given for comparison as an aproximation of the probability of INSERTION
+    
+   '''
+   
+lst = ['TTCTACGGGGGGAGACCTTTACGAATCACACCGGTCTTCTTTGTTCTAGCCGCTCTTTTTCATCAGTTGCAGCTAGTGCATAATTGCTCACAAACGTATC','TCTACGGGGGGCGTCATTACGGAATCCACACAGGTCGTTATGTTCATCTGTCTCTTTTCACAGTTGCGGCTTGTGCATAATGCTCACGAACGTATC','TCTACGGGGGGCGTCTATTACGTCGCCAACAGGTCGTATGTTCATTGTCATCATTTTCATAGTTGCGGCCTGTGCGTGCTTACGAACGTATTCC','TCCTAACGGGTAGTGTCATACGGAATCGACACGAGGTCGTATCTTCAATTGTCTCTTCACAGTTGCGGCTGTCCATAAACGCGTCCCGAACGTTATG','TATCAGTAGGGCATACTTGTACGACATTCCCCGGATAGCCACTTTTTTCCTACCCGTCTCTTTTTCTGACCCGTTCCAGCTGATAAGTCTGATGACTC','TAATCTATAGCATACTTTACGAACTACCCCGGTCCACGTTTTTCCTCGTCTTCTTTCGCTCGATAGCCATGGTAACTTCTACAAAGTTC','TATCATAGGGCATACTTTTACGAACTCCCCGGTGCACTTTTTTCCTACCGCTCTTTTTCGACTCGTTGCAGCCATGATAACTGCTACAAACTTC']
+
+Insertion = []
+
+for combo in combinations(lst, 2):  #for every possible combination
+    pat = find_common_patterns(combo[0],combo[1]) #align every element
+    count = 0
+    for i in pat[0]:  #patterns[0] can be used as the distances are the same, not the values
+        if i[0]==0:
+            count+=len(i[1])
+    Insertion.append(count) 
+print sum(Insertion)/(95.*len(Insertion))
+      
+'''
+--------    Estimating probability of DELETION   --------
+
+   Insertion probability was calculated by first taking the ratio of  length of 
+   each string given for the analysis to the average string length and next 
+   substracting the probability of insertion from each ratio. Afterwards, I took the 
+   averahe of the calculations and subtracted the result from 1. This is how I 
+   arrived at the estimation of the deletion probability equal to 0.22355889724335087
+'''
+
+sequence = (0,'TTCTACGGGGGGAGACCTTTACGAATCACACCGGTCTTCTTTGTTCTAGCCGCTCTTTTTCATCAGTTGCAGCTAGTGCATAATTGCTCACAAACGTATC'), (1,'TCTACGGGGGGCGTCATTACGGAATCCACACAGGTCGTTATGTTCATCTGTCTCTTTTCACAGTTGCGGCTTGTGCATAATGCTCACGAACGTATC'), (2,'TCTACGGGGGGCGTCTATTACGTCGCCAACAGGTCGTATGTTCATTGTCATCATTTTCATAGTTGCGGCCTGTGCGTGCTTACGAACGTATTCC'), (3,'TCCTAACGGGTAGTGTCATACGGAATCGACACGAGGTCGTATCTTCAATTGTCTCTTCACAGTTGCGGCTGTCCATAAACGCGTCCCGAACGTTATG'), (4,'TATCAGTAGGGCATACTTGTACGACATTCCCCGGATAGCCACTTTTTTCCTACCCGTCTCTTTTTCTGACCCGTTCCAGCTGATAAGTCTGATGACTC'), (5,'TAATCTATAGCATACTTTACGAACTACCCCGGTCCACGTTTTTCCTCGTCTTCTTTCGCTCGATAGCCATGGTAACTTCTACAAAGTTC'), (6,'TATCATAGGGCATACTTTTACGAACTCCCCGGTGCACTTTTTTCCTACCGCTCTTTTTCGACTCGTTGCAGCCATGATAACTGCTACAAACTTC')
+import numpy as np
+average_len = []
+deletion_prob = []
+for i in range(6):
+    average_len.append(len (sequence[i][1]) )
+    deletion_prob.append(1 - ((average_len[i]/95.)-0.230576441103))
+
+print np.mean(deletion_prob)
+
+import numpy as np
+
+def levenshtein(seq1, seq2):  
+    size_x = len(seq1) + 1
+    size_y = len(seq2) + 1
+    matrix = np.zeros ((size_x, size_y))
+    for x in xrange(size_x):
+        matrix [x, 0] = x
+    for y in xrange(size_y):
+        matrix [0, y] = y
+
+    for x in xrange(1, size_x):
+        for y in xrange(1, size_y):
+            if seq1[x-1] == seq2[y-1]:
+                matrix [x,y] = min(
+                    matrix[x-1, y] + 1,
+                    matrix[x-1, y-1],
+                    matrix[x, y-1] + 1
+                )
+            else:
+                matrix [x,y] = min(
+                    matrix[x-1,y] + 1,
+                    matrix[x-1,y-1] + 1,
+                    matrix[x,y-1] + 1
+                )
+    #print (matrix)
+    return (matrix[size_x - 1, size_y - 1])
+
+levenshtein('seq1dkcsd3', 'seq23')
+
+
+# strings that shares most similarities  with any two other randm
+lst = ['TTCTACGGGGGGAGACCTTTACGAATCACACCGGTCTTCTTTGTTCTAGCCGCTCTTTTTCATCAGTTGCAGCTAGTGCATAATTGCTCACAAACGTATC','TCTACGGGGGGCGTCATTACGGAATCCACACAGGTCGTTATGTTCATCTGTCTCTTTTCACAGTTGCGGCTTGTGCATAATGCTCACGAACGTATC','TCTACGGGGGGCGTCTATTACGTCGCCAACAGGTCGTATGTTCATTGTCATCATTTTCATAGTTGCGGCCTGTGCGTGCTTACGAACGTATTCC','TCCTAACGGGTAGTGTCATACGGAATCGACACGAGGTCGTATCTTCAATTGTCTCTTCACAGTTGCGGCTGTCCATAAACGCGTCCCGAACGTTATG','TATCAGTAGGGCATACTTGTACGACATTCCCCGGATAGCCACTTTTTTCCTACCCGTCTCTTTTTCTGACCCGTTCCAGCTGATAAGTCTGATGACTC','TAATCTATAGCATACTTTACGAACTACCCCGGTCCACGTTTTTCCTCGTCTTCTTTCGCTCGATAGCCATGGTAACTTCTACAAAGTTC','TATCATAGGGCATACTTTTACGAACTCCCCGGTGCACTTTTTTCCTACCGCTCTTTTTCGACTCGTTGCAGCCATGATAACTGCTACAAACTTC']
+
+#   --------------     LEVENSTEIN DISTANCE   --------------     
+
+import itertools 
+lg =[]
+ld = []
+
+for combo in combinations(lst, 3):  #for every possible combination
+    lg.append(levenshtein(combo[0],combo[1]))
+    
+for combo in combinations(lst, 3):    
+    if int(levenshtein(combo[0],combo[1]))== min(lg): 
+        ld.append([levenshtein(combo[0],combo[1]), combo])  #lev for every combination
+
+#   --------------     MORE PERMUTATIONS WITH SAME LEVENSTEIN DISTANCE   -------------- 
+
+if len(ld)!= 1:
+    std_dev = []
+    for i in range(len(ld)):
+        #print len(ld[i][1][0]),len(ld[i][1][1]),len(ld[i][1][2])#3 kombinacje  
+        std_dev.append(np.std([len(ld[i][1][0]),len(ld[i][1][1]),len(ld[i][1][2])])) 
+    
+    #  -----------   COMBINATION WITH SMALLEST STANDARD DEVIATION  -----------
+    
+    for i in range(len(ld)): 
+        if np.std([len(ld[i][1][0]),len(ld[i][1][1]),len(ld[i][1][2])]) == min(std_dev):
+            print ld[i][1][0],ld[i][1][1],ld[i][1][2]   #Those are the three at the to of the tree 
+            print np.random.choice([ld[i][1][0],ld[i][1][1],ld[i][1][2]], 1) #the one at the top of the tree
+            
+            
