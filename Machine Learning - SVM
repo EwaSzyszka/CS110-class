@@ -1,0 +1,281 @@
+'''
+   -----------------------------    Excercise 1    ----------------------------
+   
+   Write a python script that graphs the following data sets (attached in a
+   separate file). Use different representations for the two groups- either two colors
+   or two shapes (e.g. dots and x’s).
+   
+'''
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
+import numpy as np
+
+data = [[9,10,0],[8,7,0],[8,8,0],[11,9,0],[12,10,0],[9,10,0],[15,14,0],[20,22,0],[11,10,0],
+[9,12,0],[10,19,0],[15,18,0],[12,16,0],[8,24,0],[16,18,0],[14,20,0],[16,12,0],[14,16,0],
+[14,15,0],[17,22,0],[17,6,0],[-1,-28,1],[0,-5,1],[-5,-8,1],[-10,-40,1],[-5,-25,1],[-5,-1,1],
+[1,-20,1],[-10,-5,1],[-15,-20,1],[-10,-20,1],[-8,-5,1],[-8,-35,1],[-5,-7,1],[-6,-8,1],[-13,-38,1],
+[-15,-3,1],[-5,-18,1],[-3,-18,1],[-3,-2,1],[-20,-25,1],[-8,-25,1],[-6,-7,1],[-6,-19,1],[-5,-5,1],
+[-5,-10,1],[-4,-9,1],[0,0,1],[-5,1,1],[-1,-8,1]]
+
+x_zero = []
+y_zero = []
+y_one = []
+x_one = []
+
+for i in data:
+    if i[2] ==0:
+        x_zero.append(i[0])
+        y_zero.append(i[1])
+    elif i[2] ==1:
+        x_one.append(i[0])
+        y_one.append(i[1])        
+    
+
+for marker in ['o']:
+    plt.plot(x_zero, y_zero, marker,
+             label="marker='{0}'".format(marker))
+for marker in ['*']:
+    plt.plot(x_one, y_one, marker,
+             label="marker='{0}'".format(marker))
+plt.legend(numpoints=1)
+plt.xlim(-25, 25);
+
+
+'''
+   -----------------------------    Excercise 2    ----------------------------
+   
+   For this problem we will need to be able to run gradient descent for
+   functions of three variables. Generalize your previous python code (on 2 variable
+   gradient descent) to work for three variables.
+   #Gradient descent for 3 variables
+'''
+from sympy import *
+#f = 2*x**2 + y**5 + 0.5*z
+
+def gd(steps, gamma, x_0, y_0, z_0, partial_x,partial_y,partial_z):
+    x, y, z = x_0, y_0, z_0
+    
+    for i in range(steps):
+        #gradient descent parametric update
+        x -= gamma * eval(str(partial_x))
+        y -= gamma * eval(str(partial_y))
+        z -= gamma * eval(str(partial_z))
+        
+    return x, y, z
+
+x0,y0,z0 = 1,3,2
+gd(2,1e-1, x0,y0,z0, 4*x, 5*(y**4), 0.5)
+
+'''
+
+
+   -----------------------------    Excercise 3    ----------------------------
+   
+   In an SVM we have have training data, denoted by xi (these are our points in the graph, so each 
+   xi has an x1 and x2 coordinate) where i = 1, ..., N and our classification of each point yi. 
+   Because we only have two classes yi = −1 or yi = 1 depending on the class. Notice these are constants. 
+   The SVM is learning the equation of the separating line: f(x1, x2) = m1x1 + m2x2 + b. That means m1, m2 
+   and b are the unknown parameters whose value we are trying to find via gradient descent. For a new 
+   observation if the point (x1, x2) is above the line (i.e. if f(x1, x2) > 0) then we classify it as 1 
+   an if it is below the line (i.e. f(x1, x2) < 0) then we classify it as −1. To learn the values of m1,
+   m2 and b we need to make a loss function to minimize. Denote xi for the ith training point in the data 
+   set and it’s class labeled yi. For a particular choice of values for m1, m2 and b the loss association
+   for the observation xi is Lf (xi, yi) = ln(1 + e−yif(xi)). And the error function to be minimized will 
+   be an average loss across all observations E(m1, m2, b) = 1 NXN i=1 Lf (xi, yi). Implement this error 
+   function in python and use gradient descent to find the classifier. Don’t forget you will need to take 
+   the partial derivatives with respect to m1, m2, and b to do gradient descent.
+   
+   '''
+   
+   category = []
+x_points = []
+y_points = []
+
+for i in data:
+    category.append(i[2])
+    x_points.append(i[0])
+    y_points.append(i[1])
+    
+    
+    
+from sympy import *
+from numpy import *
+
+m = []
+m2 = []
+b = []
+
+#f = 2*x**2 + y**5 + 0.5*z
+x, y, z = symbols('x y z')
+def gd(steps, gamma, x_0, y_0, z_0, partial_x,partial_y,partial_z):
+    
+    
+    x, y, z = x_0, y_0, z_0
+    for i in range(len(category)):
+        pred = category[i]
+        x_1 = x_points[i]
+        x_2 = y_points[i]
+        line = (x*x_1)+(x_2*9+z)
+    
+        for i in range(steps):
+            #gradient descent parametric update
+            x -= gamma * eval(str(partial_x))
+            y -= gamma * eval(str(partial_y))
+            z -= gamma * eval(str(partial_z))
+        
+        m.append(x)
+        m2.append(y)
+        b.append(z)
+        #print x, y, z
+
+x0,y0,z0 = 1,3,2
+
+gd(1,1, x0,y0,z0, '-(pred*x_1)/(1 + e**(pred*line))','-(pred*x_2)/(1 + e**(pred*line))','-(pred)/(1 + e**(pred*line))')
+
+print np.mean(m),np.mean(m2),np.mean(b) #values of m1,m2 and b
+
+
+#values of m 
+rangee =  np.arange(1,len(m)+1)
+plt.plot(rangee,m)
+plt.title("Values of m throughout Gradient Descent iterrations")
+plt.show()
+
+
+#values of m2
+rangee =  np.arange(1,len(m2)+1)
+plt.plot(rangee,m2)
+plt.title("Values of m2 throughout Gradient Descent iterrations")
+plt.show()
+
+#values of b
+rangee =  np.arange(1,len(b)+1)
+plt.plot(rangee,b)
+plt.title("Values of b throughout Gradient Descent iterrations")
+plt.show()
+
+
+y_predictions = []
+def predict(x,y,m1,m2,b):
+    classification = []
+    if (m1*x + m2*y + b) >0:
+        classification.append(1)
+    else:
+        classification.append(0)
+    #print classification
+    y_predictions.append(classification)
+    
+for i in range(len(x_points)):
+    predict(x_points[i], y_points[i], -14.440000100517606, -84.62000022418401, 6.040001008786369)
+    
+print y_predictions
+print x_points
+print y_points
+
+
+
+#plotting predictions
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
+import numpy as np
+
+myList = []
+for i in range(len(x_points)):
+    myList.append([x_points[i],y_points[i],y_predictions[i][0]])
+
+
+x_zero = []
+y_zero = []
+y_one = []
+x_one = []
+
+
+for i in myList:
+    if i[2] ==0:
+        x_zero.append(i[0])
+        y_zero.append(i[1])
+    elif i[2] ==1:
+        x_one.append(i[0])
+        y_one.append(i[1])        
+    
+
+for marker in ['o']:
+    plt.plot(x_zero, y_zero, marker,
+             label="marker='{0}'".format(marker))
+for marker in ['*']:
+    plt.plot(x_one, y_one, marker,
+             label="marker='{0}'".format(marker))
+plt.legend(numpoints=1)
+# plt.xlim(-25, 25)
+
+(m1, m2, b) = (-14.440000100517606, -84.62000022418401, 6.040001008786369)
+x1 = np.linspace(-20, 20)
+plt.plot(x1, (-m1*x1 - b) / m2, )
+
+
+'''
+   -----------------------------    Excercise 4    ----------------------------
+   
+The loss function can be interpreted in the following way. The gradient of the loss function provides 
+an information about the values of m, m2 and b parameters that are fed into the SVM and help improve 
+the fit of the line to the datapoints.As one is approaching a local minimum point the loss function is 
+getting smaller (as shown in the code snippet below). This happens, as a result of dicreasing value of 
+the (eˆ(y*f(x)) term, which leads to the value of the loss function becoming closer and closer to ln(1). 
+The loss function gets bigger, as the m1x1 + m2x2 + b function evaluates at bigger values, thus we get 
+closer to ln(1 + big value resulting from evaluating m1x1 + m2x2 + b.).
+
+   -----------------------------    Excercise 5    ----------------------------
+   
+Non-binary data would not be classified as well as binary data by the SVM. Also, SVM is not ideal for high
+precision calculations in large datasets, because of the rapidly growing length of the loss function and the 
+iteration through every poin, which has the big O complexity of O(N2), where N is the number of training examples. 
+Also, SVM would not be the optimal machine learning classifier when the relationship between two classes cannot 
+be distinguished using linear fit. One example of such instance will be clustered  instances of each category.
+
+
+'''
+
+from sympy import *
+#f = 2*x**2 + y**5 + 0.5*z
+
+def gd(steps, gamma, x_0, y_0, z_0, partial_x,partial_y,partial_z):
+    x, y, z = x_0, y_0, z_0
+    
+    for i in range(steps):
+        #gradient descent parametric update
+        x -= gamma * eval(str(partial_x))
+        y -= gamma * eval(str(partial_y))
+        z -= gamma * eval(str(partial_z))
+        
+    return x, y, z
+
+loss = lambda x,y,z: 2*x**2 + y**5 + 0.5*z 
+x0,y0,z0 = 1,3,2
+print loss(x0,y0,z0)
+
+x1,y1,z1 = gd(2,1e-1, x0,y0,z0, 4*x, 5*(y**4), 0.5)
+loss(x1,y1,z1)
+
+'''
+   -----------------------------    Excercise 6    ----------------------------
+   
+The characteristics of SPAM:
+
+- contains link in the email
+- No previous history of correspondence
+- Contains files attached
+- Contains key words: win, transfer, prize, lottery, click here, log in 
+- Does it contain name, phone and company details at the bottom, if not likely spam
+
+
+The SVM would make a fit for each feature (contains link/ previous history of correspondence etc.). 
+For each feature the loss function will be minimised through gradient descent and the categories 
+(y or -1/1) will be predicted. Next  the average will be taken of those SVM runs. Thus if on average an 
+email will receive majority of classifications with the score -1 with regards to different characteristics 
+the email will be classified as a mallicious one. Else, it will be forwarded to the non-SPAM section of the inbox.  
+
+'''
