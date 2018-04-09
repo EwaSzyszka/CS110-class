@@ -23,19 +23,29 @@ def LCS(sequence1,sequence2):
 len(LCS('TTCTACGGGGGGAGACCTTTAC',"AAGAGTCG"))
 
 #   --------    Table of the lengths of the longest common subsequences for every pair of strings   --------    
+#  
+#   Observations:
+#   
+#  The average length of the string is 95
+#  None of the sequence combinations returned LCS equal to 95, meaning that there are mutations,deletions or   
+#  insertions in every pair (at least one string in each pair is mutated)
+#  Sequence 4 and 6 differ the most from each other, as they have LCS equal to 60
+#  75 is the mean LCS, which means that 0.79 % of string on average is not mutated or iterated 
+   
   
-tls.set_credentials_file(username='EwaSzyszka', api_key='xcVmZTFbJYpWuWmYJByJ')
-
 import plotly.tools as tls
+tls.set_credentials_file(username='EwaSzyszka', api_key='xcVmZTFbJYpWuWmYJByJ')
 import plotly.plotly as py
 import plotly.graph_objs as go
 
 trace = go.Table(
     header=dict(values=['','Sequence 1', 'Sequence 2', 'Sequence 3', 'Sequence 4', 'Sequence 5', 'Sequence 6','Sequence 7']),
     cells=dict(values=[['Sequence 1', 'Sequence 2', 'Sequence 3', 'Sequence 4', 'Sequence 5', 'Sequence 6', 'Sequence 7'],['100', '82', '73', '72','72','70','80'],
-                       ['82', '100', '83', '81','67','65','70'],['73', '83', '100', '73'],['72', '81', '73', '0'],['72', '67', '0', '0'],['70', '65', '0', '0'], ['80', '70', '0', '0']]))
+                       ['82', '100', '83', '81','67','65','70'],['73', '83', '100', '73','62','61','67'],
+                       ['72', '81', '73', '100','62','60','63'],['72', '67', '62', '62','100','70','82'],['70', '65', '61', '60','70','100','79'], ['80', '70', '67', '63','82','79','100']]))
 data = [trace] 
 py.iplot(data, filename = 'basic_table')
+
 
 '''
   --------    Estimating probability of MUTATION   --------   
@@ -147,42 +157,21 @@ for i in range(6):
 
 print np.mean(deletion_prob)
 
-import numpy as np
+'''
+--------    Tree of RELATIONSHIP   --------
 
-def levenshtein(seq1, seq2):  
-    size_x = len(seq1) + 1
-    size_y = len(seq2) + 1
-    matrix = np.zeros ((size_x, size_y))
-    for x in xrange(size_x):
-        matrix [x, 0] = x
-    for y in xrange(size_y):
-        matrix [0, y] = y
+   The following suggested algorithm assigns the strings to three classes:
+   Parents, Children and Children's children. Using Levenstein's distance
+   and standard deviation the similarity of each combination of three strings 
+   is assesed and next the most similar three strings are assigned as the 
+   Parents and Children and the remaining strings are assigned the Children's 
+   children class. I used levenshtein distance library.
 
-    for x in xrange(1, size_x):
-        for y in xrange(1, size_y):
-            if seq1[x-1] == seq2[y-1]:
-                matrix [x,y] = min(
-                    matrix[x-1, y] + 1,
-                    matrix[x-1, y-1],
-                    matrix[x, y-1] + 1
-                )
-            else:
-                matrix [x,y] = min(
-                    matrix[x-1,y] + 1,
-                    matrix[x-1,y-1] + 1,
-                    matrix[x,y-1] + 1
-                )
-    #print (matrix)
-    return (matrix[size_x - 1, size_y - 1])
-
-levenshtein('seq1dkcsd3', 'seq23')
-
-
-# strings that shares most similarities  with any two other randm
+'''
 lst = ['TTCTACGGGGGGAGACCTTTACGAATCACACCGGTCTTCTTTGTTCTAGCCGCTCTTTTTCATCAGTTGCAGCTAGTGCATAATTGCTCACAAACGTATC','TCTACGGGGGGCGTCATTACGGAATCCACACAGGTCGTTATGTTCATCTGTCTCTTTTCACAGTTGCGGCTTGTGCATAATGCTCACGAACGTATC','TCTACGGGGGGCGTCTATTACGTCGCCAACAGGTCGTATGTTCATTGTCATCATTTTCATAGTTGCGGCCTGTGCGTGCTTACGAACGTATTCC','TCCTAACGGGTAGTGTCATACGGAATCGACACGAGGTCGTATCTTCAATTGTCTCTTCACAGTTGCGGCTGTCCATAAACGCGTCCCGAACGTTATG','TATCAGTAGGGCATACTTGTACGACATTCCCCGGATAGCCACTTTTTTCCTACCCGTCTCTTTTTCTGACCCGTTCCAGCTGATAAGTCTGATGACTC','TAATCTATAGCATACTTTACGAACTACCCCGGTCCACGTTTTTCCTCGTCTTCTTTCGCTCGATAGCCATGGTAACTTCTACAAAGTTC','TATCATAGGGCATACTTTTACGAACTCCCCGGTGCACTTTTTTCCTACCGCTCTTTTTCGACTCGTTGCAGCCATGATAACTGCTACAAACTTC']
 
 #   --------------     LEVENSTEIN DISTANCE   --------------     
-
+import levenshtein_distance
 import itertools 
 lg =[]
 ld = []
@@ -206,7 +195,25 @@ if len(ld)!= 1:
     
     for i in range(len(ld)): 
         if np.std([len(ld[i][1][0]),len(ld[i][1][1]),len(ld[i][1][2])]) == min(std_dev):
-            print ld[i][1][0],ld[i][1][1],ld[i][1][2]   #Those are the three at the to of the tree 
-            print np.random.choice([ld[i][1][0],ld[i][1][1],ld[i][1][2]], 1) #the one at the top of the tree
-            
-            
+            #print ld[i][1][0],ld[i][1][1],ld[i][1][2]   #Those are the three at the to of the tree 
+            top = np.random.choice([ld[i][1][0],ld[i][1][1],ld[i][1][2]], 1) #the one at the top of the tree
+            if ld[i][1][0] == top:
+                print "Parent "
+                print top
+                print "Children "
+                print ld[i][1][1], ld[i][1][2]
+            elif ld[i][1][1] == top:
+                print "Parent "
+                print top
+                print "Children "
+                print ld[i][1][0], ld[i][1][2]
+            elif ld[i][1][2] == top:
+                print "Parent "
+                print top
+                print "Children "
+                print ld[i][1][1], ld[i][1][0]
+
+print ("Children's children")
+for j in range(6):
+    if lst[j] != ld[i][1][1] and lst[j] != ld[i][1][0] and lst[j] != ld[i][1][2]: 
+        print lst[j]
