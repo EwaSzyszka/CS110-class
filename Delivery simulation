@@ -1,0 +1,125 @@
+import matplotlib.pyplot as plt
+import networkx as nx
+%matplotlib inline
+
+class Delivery:
+    
+    transaction_count = 0
+
+    
+    G = nx.Graph()
+    G.add_nodes_from(["Dehli", "Ahmadabad","Kolkata",'Bangalore','Pune','Maduraj'])
+    G.add_edge('Dehli', 'Ahmadabad', length =890)
+    G.add_edge('Dehli', 'Kolkata', length =1422)
+    G.add_edge('Dehli', 'Bangalore', length =2168)
+    G.add_edge('Dehli', 'Pune', length =1450)
+    G.add_edge('Dehli', 'Maduraj', length = 2603)
+
+    G.add_edge('Ahmadabad', 'Kolkata', length =1902)
+    G.add_edge('Ahmadabad', 'Bangalore', length =1403)
+    G.add_edge('Ahmadabad', 'Pune', length =624)
+    G.add_edge('Ahmadabad', 'Maduraj', length =1807)
+    G.add_edge('Kolkata', 'Bangalore', length =1778)
+    G.add_edge('Kolkata', 'Pune', length =1782)
+    G.add_edge('Kolkata', 'Maduraj', length =2043)
+
+    G.add_edge('Bangalore', 'Pune', length =824)
+    G.add_edge('Bangalore', 'Maduraj', length =404)
+    G.add_edge('Pune', 'Maduraj', length =1195)
+    pos = nx.spring_layout(G)
+    
+    def __init__(self, city_distance_road): 
+        Delivery.transaction_count += 1
+        self.city_distance_road = city_distance_road
+
+        
+    def displayCount(self):
+        print "Total transactions %d" % Delivery.transaction_count
+
+    def check_availability(self):
+        _from_ = raw_input("Where are you moving items form: ")
+        __to__ = raw_input("Where are you moving items to: ")
+        __capacity__ = int(raw_input("What is the capacity : "))
+
+        for i in range(len(city_distance_road)):
+
+            if city_distance_road.keys()[i][0] == _from_ and city_distance_road.keys()[i][1] == __to__:
+
+                if city_distance_road.values()[i][1] == True and city_distance_road.values()[i][2] >= __capacity__:
+                    print ('flight')
+                    city_distance_road.values()[i][2]= city_distance_road.values()[i][2] - __capacity__
+                    print city_distance_road.values()[i][2]
+
+                elif city_distance_road.values()[i][1] == False or city_distance_road.values()[i][2] < __capacity__:
+
+                    if city_distance_road.values()[i][3] >= __capacity__: 
+                        print ('road') 
+                        
+                        city_distance_road.values()[i][3]= city_distance_road.values()[i][3] - __capacity__
+                        print city_distance_road.values()[i][3] #how many parcels left
+                        
+                        #calculate the most optimal road way 
+                        nx.draw(G,pos,node_color='k')
+                        path = nx.shortest_path(G,source=_from_,target=__to__,weight='length')
+                        path_edges = zip(path,path[1:])
+                        nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='g')
+                        nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='g',width=7)
+                        print("Shortest path: ", nx.shortest_path_length(G,source=_from_,target=__to__,weight='length'),' km')
+                        plt.show()
+
+                    elif city_distance_road.values()[i][3] < __capacity__:
+                        print ('stay at the city ')
+                        
+                        #color a specific node of the city that you are at 
+                        
+                        nx.draw(G,pos,node_color='k')
+                        path = nx.shortest_path(G,source='Dehli',target='Maduraj',weight='length')
+                        path_edges = zip(path,path[1:])
+                        nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='g')
+                        nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='g',width=7)
+                        print(nx.shortest_path_length(G,source='Dehli',target='Maduraj',weight='length'))
+                        plt.show()
+                        
+city_distance_road = { ('Ahmadabad',"Dehli"): [890, True, 300,500],
+    ('Ahmadabad',"Kolkata"): [1902, False,-1,400],
+    ('Ahmadabad',"Bangalore"): [1403, True,50,100],
+    ('Ahmadabad',"Pune"): [624, False,-1, 200],
+    ('Ahmadabad',"Maduraj"):[1807, True,50,100],
+
+    ('Dehli', 'Ahmadabad'): [890, False, -1, 300],
+    ('Dehli', 'Kolkata'): [1422,True, 200, 500],
+    ('Dehli', 'Bangalore'): [2168,True, 50, 100],
+    ('Dehli', 'Pune'): [1450,False, -1, 200],
+    ('Dehli', 'Maduraj'):[2603,False,-1, 300],
+
+
+    ('Kolkata','Dehli'): [1422,True, 100, 200],
+    ('Kolkata','Bangalore'): [1778, False,-1, 200],
+    ('Kolkata','Pune'): [1782, False, -1, 150],
+    ('Kolkata','Maduraj'): [2043, True, 100, 200],
+    ('Kolkata','Ahmadabad'): [1902, False,-1, 300],
+
+    ('Bangalore','Dehli'): [2168,True, 100,  200],
+    ('Bangalore','Ahmadabad'): [1403, False, -1, 100],
+    ('Bangalore','Kolkata'): [1778, True,100, 200],
+    ('Bangalore','Pune'): [824, True,100, 100],
+    ('Bangalore','Maduraj'):[404, True,100, 100],
+
+    ('Pune','Maduraj'): [1195, True,100, 100],
+    ('Pune','Bangalore'): [824, True, 50, 100],
+    ('Pune','Kolkata'): [1782, False, -1, 150],
+    ('Pune','Ahmadabad'): [624, False, -1, 300],
+    ('Pune','Dehli'): [1450,False,-1,  100],
+
+    ('Maduraj','Dehli'):[2603,False,-1, 200],
+    ('Maduraj','Ahmadabad'):[1807, True,100, 200],
+    ('Maduraj','Kolkata'): [2043, True,200, 300],
+    ('Maduraj','Bangalore'):[404, True,20, 100],
+    ('Maduraj','Pune'): [1195, True,40, 100] 
+    }
+        
+emp1 = Delivery(city_distance_road)
+emp2 = Delivery(city_distance_road)
+emp1.check_availability()
+emp2.check_availability()
+emp1.displayCount()
