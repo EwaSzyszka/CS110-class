@@ -1,81 +1,54 @@
+import matplotlib.pyplot as plt
 from gmplot import gmplot
+import networkx as nx
+%matplotlib inline
+packages_delivered = 0
+packages_queued = {"Dehli": 0, "Ahmadabad": 0,"Kolkata": 0 ,'Bangalore': 0 ,'Pune': 0 ,'Maduraj': 0 }
 
 gmap = gmplot.GoogleMapPlotter(20.647865,78.574219, 5)
- 
-#Dehli-Kolkata ---- Kolkata-Dehli
-Dehli_Kolkata,Dehli_Kolkata2 = zip(*[(28.525823, 77.276844),(27.97613,77.618408),(27.553248,77.744751),(27.030912,78.486328),(26.952596,79.403687),(26.573462,80.266113),(25.844064,80.969238),(25.308939,82.485352),(25.149926,83.62793),(24.731532,84.375),(24.351768,85.275879
-),(23.930699,86.088867),(23.508253,87.275391),(22.500561, 88.359751)])
-gmap.plot(Dehli_Kolkata,Dehli_Kolkata2, 'cornflowerblue', edge_width=3)
 
-#Dehli-Ahmadabad --- Ahmadabad-Dehli
-
+#Long and Lat values for the road routs on the map
+Dehli_Kolkata,Dehli_Kolkata2 = zip(*[(28.525823, 77.276844),(27.97613,77.618408),(27.553248,77.744751),(27.030912,78.486328),(26.952596,79.403687),(26.573462,80.266113),(25.844064,80.969238),(25.308939,82.485352),(25.149926,83.62793),(24.731532,84.375),(24.351768,85.275879),(23.930699,86.088867),(23.508253,87.275391),(22.500561, 88.359751)])
 Dehli_Ahmadabad,Dehli_Ahmadabad2 = zip(*[(28.525823, 77.276844),(28.270198,76.860352),(27.94071,76.398926),(27.298245,76.003418),(26.907049,75.783691),(26.573462,75.014648),(26.140316,74.421387),(25.507412,73.894043),(24.61173,73.806152),(23.81014,73.520508),(23.036433,72.572937)])
-gmap.plot(Dehli_Ahmadabad,Dehli_Ahmadabad2, 'cornflowerblue', edge_width=3)
-
-#Ahmadabad-Pune --- Pune-Ahmadabad
 Ahmadabad_Pune,Ahmadabad_Pune2 = zip(*[(23.036433,72.572937),(22.639025,72.949219),(22.07003,73.234863),(21.437389,73.015137),(20.760908,73.015137),(20.163911,72.949219),(19.647416,72.905273),(19.00465,73.125),(18.755165,73.54248),(18.60946,73.850098)])
-gmap.plot(Ahmadabad_Pune,Ahmadabad_Pune2, 'cornflowerblue', edge_width=3)
-
-#Pune-Bangalore --- Bangalor-Pune
 Pune_Bangalore,Pune_Bangalore2 = zip(*[(18.60946,73.850098),(18.150724,73.937988),(16.93561,74.267578),(15.839468,74.575195),(15.161922,75.19043),(14.354515,76.135254),(13.821723,76.794434),(13.266323,77.189941),(12.971599,77.594563)])
-gmap.plot(Pune_Bangalore,Pune_Bangalore2, 'cornflowerblue', edge_width=3)
-
-#Bangalore_Dehli
 Bangalore_Dehli,Bangalore_Dehli2 = zip(*[(12.971599,77.594563),(13.715016,77.739258),(14.886042,77.607422),(15.754897,78.046875),(16.809449,78.134766),(17.648908,78.508301),(19.025424,78.376465),(20.205158,78.706055),(21.376019,78.925781),(23.246057,79.013672),(24.61173,78.464355),(26.17976,78.266602),(27.454341,77.849121),(28.525823, 77.276844)])
-gmap.plot(Bangalore_Dehli,Bangalore_Dehli2, 'cornflowerblue', edge_width=3)
-
-
-#Bangalor_Kolkata
 Bangalor_Kolkata,Bangalor_Kolkata2 = zip(*[(12.971599,77.594563),(13.715016,77.739258),(14.886042,77.607422),(16.367229,79.321289),(17.124692,80.551758),(17.879083,81.540527),(18.775969,82.683105),(19.336716,84.133301),(19.833548,85.231934),(20.719811,86.088867),(21.764261,87.077637),(22.500561, 88.359751)])
-gmap.plot(Bangalor_Kolkata,Bangalor_Kolkata2, 'cornflowerblue', edge_width=3)
-
-#Bangalore_Ahmadabad
 Bangalore_Ahmadabad,Bangalore_Ahmadabad2 = zip(*[(12.971599,77.594563),(13.757705,76.904297),(14.375801,76.311035),(15.902873,76.179199),(17.103693,75.783691),(18.234221,76.047363),(19.626721,75.651855),(21.150774,74.289551),(21.580487,73.608398),(23.036433,72.572937)])
-gmap.plot(Bangalore_Ahmadabad,Bangalore_Ahmadabad2, 'cornflowerblue', edge_width=3)
-
-
-#Bangalore_Maduraj
 Bangalore_Maduraj,Bangalore_Maduraj2 = zip(*[(12.971599,77.594563),(12.237665,78.156738),(11.398905,78.178711),(10.44964,77.958984),(9.9739,78.134766)])
-gmap.plot(Bangalore_Maduraj,Bangalore_Maduraj2, 'cornflowerblue', edge_width=3)
-
-#Ahmadabad_Maduraj
 Ahmadabad_Maduraj,Ahmadabad_Maduraj2 = zip(*[(9.9739,78.134766),(10.44964,77.958984),(11.398905,78.178711),(12.237665,78.156738),(12.971599,77.594563),(12.971599,77.594563),(13.757705,76.904297),(14.375801,76.311035),(15.902873,76.179199),(17.103693,75.783691),(18.234221,76.047363),(19.626721,75.651855),(21.150774,74.289551),(21.580487,73.608398),(23.036433,72.572937)])
-gmap.plot(Ahmadabad_Maduraj,Ahmadabad_Maduraj2, 'cornflowerblue', edge_width=3)
-
-
-#Ahmadabad_Kolkata
 Ahmadabad_Kolkata,Ahmadabad_Kolkata2 = zip(*[(23.036433,72.572937),(22.760649,73.916016),(22.720119,75.014648),(22.69985,76.376953),(21.805068,78.112793),(21.068781,79.584961),(21.191753,82.22168),(21.45784,84.133301),(21.988556,86.19873),(22.314169,87.1875),(22.500561, 88.359751)])
-gmap.plot(Ahmadabad_Kolkata,Ahmadabad_Kolkata2, 'cornflowerblue', edge_width=3)
-
-#Pune_Maduraj
 Pune_Maduraj,Pune_Maduraj2 = zip(*[(18.60946,73.850098),(18.150724,73.937988),(16.93561,74.267578),(15.839468,74.575195),(15.161922,75.19043),(14.354515,76.135254),(13.821723,76.794434),(13.266323,77.189941),(12.971599,77.594563),(12.971599,77.594563),(12.237665,78.156738),(11.398905,78.178711),(10.44964,77.958984),(9.9739,78.134766)])
-gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
-
-#Dehli_Maduraj
 Dehli_Maduraj,Dehli_Maduraj2 = zip(*[(9.9739,78.134766),(10.44964,77.958984),(11.398905,78.178711),(12.237665,78.156738),(12.971599,77.594563),(12.971599,77.594563),(13.715016,77.739258),(14.886042,77.607422),(15.754897,78.046875),(16.809449,78.134766),(17.648908,78.508301),(19.025424,78.376465),(20.205158,78.706055),(21.376019,78.925781),(23.246057,79.013672),(24.61173,78.464355),(26.17976,78.266602),(27.454341,77.849121),(28.525823, 77.276844)])
-gmap.plot(Dehli_Maduraj,Dehli_Maduraj2, 'cornflowerblue', edge_width=3)
-
-#Kolkata_Maduraj
 Kolkata_Maduraj,Kolkata_Maduraj2 = zip(*[(22.500561, 88.359751),(21.805068,87.275391),(20.740361,86.176758),(19.295245,84.70459),(18.025403,83.474121),(17.208667,82.265625),(16.367229,81.23291),(15.712598,80.222168),(14.290646,79.914551),(13.309092,80.112305),(12.173237,79.672852),(11.075635,78.903809),(10.384808,78.442383),(9.9739,78.134766)])
-gmap.plot(Kolkata_Maduraj,Kolkata_Maduraj2, 'cornflowerblue', edge_width=3)
-
-#Pune_Dehli
 Pune_Dehli,Pune_Dehli2 = zip(*[(18.60946,73.850098),(19.129254,74.091797),(20.308226,74.289551),(21.45784,75.058594),(22.537589,75.673828),(23.729705,76.794434),(25.11014,77.607422),(26.357092,78.178711),(27.726974,77.783203),(28.525823, 77.276844)])
-gmap.plot(Pune_Dehli,Pune_Dehli2, 'cornflowerblue', edge_width=3)
-
-#Pune_Kalkota
 Pune_Dehli,Pune_Dehli2 = zip(*[(18.60946,73.850098),(19.08773,74.619141),(19.253763,75.761719),(19.274505,77.080078),(19.461068,78.00293),(20.081386,78.947754),(20.246393,80.288086),(20.781453,81.628418),(21.314623,83.29834),(21.560053,85.012207),(22.253174,86.923828),(22.500561, 88.359751)])
-gmap.plot(Pune_Dehli,Pune_Dehli2, 'cornflowerblue', edge_width=3)
+Pune_Kolkata,Pune_Kolkata2 = zip(*[(18.60946,73.850098),(19.08773,74.619141),(19.253763,75.761719),(19.274505,77.080078),(19.461068,78.00293),(20.081386,78.947754),(20.246393,80.288086),(20.781453,81.628418),(21.314623,83.29834),(21.560053,85.012207),(22.253174,86.923828),(22.500561, 88.359751)])
 
+#Long and Lat values for air routs on the map
+DA,AD = zip(*[(28.525823, 77.276844),(23.036433,72.572937)])
+DK,KD = zip(*[(28.525823, 77.276844),(23.036433,72.572937)])
+DB,BD =  zip(*[(28.525823, 77.276844),(12.971599,77.594563)])
+DM,MD =  zip(*[(28.525823, 77.276844),(9.9739,78.134766)])
+DP,PD =  zip(*[(28.525823, 77.276844),(18.60946,73.850098)])
+KB,BK =  zip(*[(22.500561, 88.359751),(12.971599,77.594563)])
+KA,AK =  zip(*[(22.500561, 88.359751),(23.036433,72.572937)])
+KM,MK =  zip(*[(22.500561, 88.359751),(9.9739,78.134766)])
+KP,PK =  zip(*[(22.500561, 88.359751),(18.60946,73.850098)])
+BA,AB =  zip(*[(12.971599,77.594563),(23.036433,72.572937)])
+BM,MB =  zip(*[(12.971599,77.594563),(9.9739,78.134766)])
+BP,PB =  zip(*[(12.971599,77.594563),(18.60946,73.850098)])
+AM,MA =  zip(*[(23.036433,72.572937),(9.9739,78.134766)])
+AP,PA =  zip(*[(23.036433,72.572937),(18.60946,73.850098)])
+MP,PM =  zip(*[(9.9739,78.134766),(18.60946,73.850098)])
 
-# Marker
+#Long and lat values of specific cities
 Dehli, Dehli2 = 28.525823, 77.276844
 Kolkata, Kolkata2 = 22.500561, 88.359751
 Bangalore, Bangalore2 = 12.971599,77.594563
 Ahmadabad, Ahmadabad2 = 23.036433,72.572937
 Maduraj, Maduraj2 = 9.9739,78.134766
 Pune,Pune2 = 18.60946,73.850098
-
 
 gmap.marker(Dehli, Dehli2, 'cornflowerblue')
 gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
@@ -84,5 +57,785 @@ gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
 gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
 gmap.marker(Pune,Pune2, 'cornflowerblue')
 
-# Draw
-gmap.draw("my_map.html")
+
+
+class Delivery:
+    '''This class calculates the most optimal routs and assigns air or road mean of transportation or 
+    queues packages in a city, which can be seen in the printed packages_queued '''
+    
+    transaction_count = 0
+
+    def __init__(self, city_distance_road): 
+        Delivery.transaction_count += 1
+        self.city_distance_road = city_distance_road
+        
+    def air_plotter(self,_from_,__to__):
+        if _from_ == 'Kolkata' and __to__ == "Pune":
+            gmap.plot(KP,PK,'cornflowerblue', edge_width=3)
+        if _from_ == 'Pune' and __to__ == "Kolkata":
+            gmap.plot(KP,PK,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Dehli' and __to__ == "Ahmadabad":
+            gmap.plot(DA,AD,'cornflowerblue', edge_width=3)
+        if _from_ == 'Ahmadabad' and __to__ == "Dehli":
+            gmap.plot(DA,AD,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Dehli' and __to__ == "Bangalore":
+            gmap.plot(DB,BD,'cornflowerblue', edge_width=3)
+        if _from_ == 'Bangalore' and __to__ == "Dehli":
+            gmap.plot(DB,BD,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Dehli' and __to__ == "Maduraj":
+            gmap.plot(DM,MD,'cornflowerblue', edge_width=3)
+        if _from_ == 'Maduraj' and __to__ == "Dehli":
+            gmap.plot(DM,MD,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Pune' and __to__ == "Dehli":
+            gmap.plot(DP,PD,'cornflowerblue', edge_width=3)    
+        if _from_ == 'Dehli' and __to__ == "Pune":
+            gmap.plot(DP,PD,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Bangalore' and __to__ == "Kolkata":
+            gmap.plot(KB,BK,'cornflowerblue', edge_width=3)    
+        if _from_ == 'Kolkata' and __to__ == "Bangalore":
+            gmap.plot(KB,BK,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Ahmadabad' and __to__ == "Kolkata":
+            gmap.plot(KA,AK,'cornflowerblue', edge_width=3)      
+        if _from_ == 'Kolkata' and __to__ == "Ahmadabad":
+            gmap.plot(KA,AK,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Maduraj' and __to__ == "Kolkata":
+            gmap.plot(KM,MK,'cornflowerblue', edge_width=3)    
+        if _from_ == 'Kolkata' and __to__ == "Maduraj":
+            gmap.plot(KM,MK,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Bangalore' and __to__ == "Ahmadabad":
+            gmap.plot(BA,AB,'cornflowerblue', edge_width=3)
+        if _from_ == 'Ahmadabad' and __to__ == "Bangalore":
+            gmap.plot(BA,AB,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Bangalore' and __to__ == "Maduraj":
+            gmap.plot(BM,MB,'cornflowerblue', edge_width=3)
+        if _from_ == 'Maduraj' and __to__ == "Bangalore":
+            gmap.plot(BM,MB,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Pune' and __to__ == "Bangalore":
+            gmap.plot(BP,PB,'cornflowerblue', edge_width=3)    
+        if _from_ == 'Bangalore' and __to__ == "Pune":
+            gmap.plot(BP,PB,'cornflowerblue', edge_width=3)
+
+        if _from_ == 'Ahmadabad' and __to__ == "Maduraj":
+            gmap.plot(AM,MA,'cornflowerblue', edge_width=3)
+        if _from_ == 'Maduraj' and __to__ == "Ahmadabad":
+            gmap.plot(AM,MA,'cornflowerblue', edge_width=3)    
+
+        if _from_ == 'Ahmadabad' and __to__ == "Pune":
+            gmap.plot(AP,PA,'cornflowerblue', edge_width=3)
+        if _from_ == 'Pune' and __to__ == "Ahmadabad":
+            gmap.plot(AP,PA,'cornflowerblue', edge_width=3)    
+
+        if _from_ == 'Pune' and __to__ == "Maduraj":
+            gmap.plot(MP,PM,'cornflowerblue', edge_width=3)   
+        if _from_ == 'Maduraj' and __to__ == "Pune":
+            gmap.plot(MP,PM,'cornflowerblue', edge_width=3)
+
+
+        gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+        gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+        gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+        gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+        gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+        gmap.marker(Pune,Pune2, 'cornflowerblue')
+        
+        
+    def plotter(self,_from_,__to__):
+        if _from_ == 'Dehli' and __to__ == "Kolkata":
+            gmap.plot(Dehli_Kolkata,Dehli_Kolkata2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Kolkata' and __to__ == "Dehli":
+            gmap.plot(Dehli_Kolkata,Dehli_Kolkata2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Ahmadabad' and __to__ == "Dehli":
+            gmap.plot(Dehli_Ahmadabad,Dehli_Ahmadabad2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Dehli' and __to__ == "Ahmadabad":
+            gmap.plot(Dehli_Ahmadabad,Dehli_Ahmadabad2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Ahmadabad' and __to__ == "Pune":
+            gmap.plot(Ahmadabad_Pune,Ahmadabad_Pune2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Pune' and __to__ == "Ahmadabad":
+            gmap.plot(Ahmadabad_Pune,Ahmadabad_Pune2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Pune' and __to__ == "Bangalore":
+            gmap.plot(Pune_Bangalore,Pune_Bangalore2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Bangalore' and __to__ == "Pune":
+            gmap.plot(Pune_Bangalore,Pune_Bangalore2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Dehli' and __to__ == "Bangalore":
+            gmap.plot(Bangalore_Dehli,Bangalore_Dehli2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Bangalore' and __to__ == "Dehli":   
+            gmap.plot(Bangalore_Dehli,Bangalore_Dehli2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Dehli' and __to__ == "Bangalore":
+            gmap.plot(Bangalore_Dehli,Bangalore_Dehli2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+            
+
+        if _from_ == 'Bangalore' and __to__ == "Dehli":
+            gmap.plot(Bangalore_Dehli,Bangalore_Dehli2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Bangalore' and __to__ == "Kolkata":
+            gmap.plot(Bangalore_Kolkata,Bangalor_Kolkata2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Kolkata' and __to__ == "Bangalore":
+            gmap.plot(Bangalore_Kolkata,Bangalor_Kolkata2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Bangalore' and __to__ == "Ahmadabad":
+            gmap.plot(Bangalore_Ahmadabad,Bangalore_Ahmadabad2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Ahmadabad' and __to__ == "Bangalore":
+            gmap.plot(Bangalore_Ahmadabad,Bangalore_Ahmadabad2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Maduraj' and __to__ == "Bangalore":
+            gmap.plot(Bangalore_Maduraj,Bangalore_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Bangalore' and __to__ == "Maduraj":
+            gmap.plot(Bangalore_Maduraj,Bangalore_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Maduraj' and __to__ == "Ahmadabad":
+            gmap.plot(Ahmadabad_Maduraj,Ahmadabad_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Ahmadabad' and __to__ == "Maduraj":
+            gmap.plot(Ahmadabad_Maduraj,Ahmadabad_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Ahmadabad' and __to__ == "Kolkata":
+            gmap.plot(Ahmadabad_Kolkata,Ahmadabad_Kolkata2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Kolkata' and __to__ == "Ahmadabad":
+            gmap.plot(Ahmadabad_Kolkata,Ahmadabad_Kolkata22, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Pune' and __to__ == "Maduraj":
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Maduraj' and __to__ == "Pune":
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Dehli' and __to__ == "Maduraj":
+            gmap.plot(Dehli_Maduraj,Dehli_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Maduraj' and __to__ == "Dehli":
+            gmap.plot(Dehli_Maduraj,Dehli_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Maduraj' and __to__ == "Kolkata":
+            gmap.plot(Kolkata_Maduraj,Kolkata_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Kolkata' and __to__ == "Maduraj":
+            gmap.plot(Kolkata_Maduraj,Kolkata_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Pune' and __to__ == "Dehli":
+            gmap.plot(Pune_Dehli,Pune_Dehli2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Dehli' and __to__ == "Pune":
+            gmap.plot(Pune_Dehli,Pune_Dehli2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Pune' and __to__ == "Kolkata":
+            gmap.plot(Pune_Kolkata,Pune_Kolkata2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+
+        if _from_ == 'Kolkata' and __to__ == "Pune":
+            gmap.plot(Pune_Kolkata,Pune_Kolkata2, 'cornflowerblue', edge_width=3)
+            gmap.plot(Pune_Maduraj,Pune_Maduraj2, 'cornflowerblue', edge_width=3)
+            gmap.marker(Dehli, Dehli2, 'cornflowerblue')
+            gmap.marker(Kolkata, Kolkata2, 'cornflowerblue')
+            gmap.marker(Bangalore, Bangalore2, 'cornflowerblue')
+            gmap.marker(Ahmadabad, Ahmadabad2, 'cornflowerblue')
+            gmap.marker(Maduraj, Maduraj2, 'cornflowerblue')
+            gmap.marker(Pune,Pune2, 'cornflowerblue')
+
+    #counter of number of days in which packages are sent    
+    def displayCount(self):
+        print "Total transactions %d" % Delivery.transaction_count
+    
+    
+    def check_availability(self):
+        '''This method asks the user for the city from which the packages are supposed to be sent and
+        to which city the packages are ment to be delivered, as well as in which quantities and 
+        assesses which routs are feasible'''
+        
+        _from_ = raw_input("Where are you moving items form: ") 
+        __to__ = raw_input("Where are you moving items to: ")
+        __capacity__ = int(raw_input("What is the capacity : ")) + packages_queued[_from_]
+        
+
+        for i in range(len(city_distance_road)):
+
+            if city_distance_road.keys()[i][0] == _from_ and city_distance_road.keys()[i][1] == __to__:
+
+                if city_distance_road.values()[i][1] == True and city_distance_road.values()[i][2] != 0: #>= __capacity__:
+                    
+                    if __capacity__ <= city_distance_road.values()[i][2]:
+                        print ('All packages are going by air', __capacity__)
+                        city_distance_road.values()[i][2] = city_distance_road.values()[i][2] - __capacity__
+                        print city_distance_road.values()[i][2]
+                        
+                        G = nx.Graph()
+                        G.add_nodes_from(["Dehli", "Ahmadabad","Kolkata",'Bangalore','Pune','Maduraj'])
+                        G.add_edge('Dehli', 'Ahmadabad', length =890)
+                        G.add_edge('Dehli', 'Kolkata', length =1422)
+                        G.add_edge('Dehli', 'Bangalore', length =2168)
+                        G.add_edge('Dehli', 'Pune', length =1450)
+                        G.add_edge('Dehli', 'Maduraj', length = 2603)
+
+                        G.add_edge('Ahmadabad', 'Kolkata', length =1902)
+                        G.add_edge('Ahmadabad', 'Bangalore', length =1403)
+                        G.add_edge('Ahmadabad', 'Pune', length =624)
+                        G.add_edge('Ahmadabad', 'Maduraj', length =1807)
+                        G.add_edge('Kolkata', 'Bangalore', length =1778)
+                        G.add_edge('Kolkata', 'Pune', length =1782)
+                        G.add_edge('Kolkata', 'Maduraj', length =2043)
+
+                        G.add_edge('Bangalore', 'Pune', length =824)
+                        G.add_edge('Bangalore', 'Maduraj', length =404)
+                        G.add_edge('Pune', 'Maduraj', length =1195)
+                        pos = nx.spring_layout(G) 
+                        
+                        #___________________________STREIGHT FLIGHT LINES ON MAP __________________________________
+                        
+                        self.air_plotter(_from_,__to__)
+                        gmap.draw("Map_route.html")
+                        
+                        #_________________________________________________________________
+
+                        #coloring the graph for the flight
+                        kolorki = []
+                        for i in G.edges():
+                            if i == (_from_, __to__):
+                                kolorki.append('r')
+                            else:
+                                kolorki.append('black')
+
+                        nx.draw(G,pos,node_color= 'black' , edge_color = kolorki, with_labels = True)
+                        nx.draw_networkx_nodes(G,pos,nodelist=(_from_,__to__),node_color='r')
+                        plt.show()
+                        
+                    #___________________________Fraction by air______________________________________
+                        
+                    
+                    elif __capacity__ > city_distance_road.values()[i][2]:
+                        air_fraction = __capacity__ - (__capacity__ - city_distance_road.values()[i][2])
+                        print ('Those packages are going by air ',air_fraction)
+                        city_distance_road.values()[i][2]= city_distance_road.values()[i][2] - air_fraction
+                        reduced_capacity = __capacity__ - air_fraction
+                        
+            
+                        #if there is space on road
+                        if reduced_capacity <= city_distance_road.values()[i][3]:
+                            print ('Those packages are going by road: ', reduced_capacity)
+                            city_distance_road.values()[i][3] = city_distance_road.values()[i][3] - reduced_capacity
+                            print city_distance_road.values()[i][3]
+                            
+                            #air and road --> graph optimal path road (green) + streight air 
+                            G = nx.Graph()
+                            G.add_nodes_from(["Dehli", "Ahmadabad","Kolkata",'Bangalore','Pune','Maduraj'])
+                            G.add_edge('Dehli', 'Ahmadabad', length =890)
+                            G.add_edge('Dehli', 'Kolkata', length =1422)
+                            G.add_edge('Dehli', 'Bangalore', length =2168)
+                            G.add_edge('Dehli', 'Pune', length =1450)
+                            G.add_edge('Dehli', 'Maduraj', length = 2603)
+
+                            G.add_edge('Ahmadabad', 'Kolkata', length =1902)
+                            G.add_edge('Ahmadabad', 'Bangalore', length =1403)
+                            G.add_edge('Ahmadabad', 'Pune', length =624)
+                            G.add_edge('Ahmadabad', 'Maduraj', length =1807)
+                            G.add_edge('Kolkata', 'Bangalore', length =1778)
+                            G.add_edge('Kolkata', 'Pune', length =1782)
+                            G.add_edge('Kolkata', 'Maduraj', length =2043)
+
+                            G.add_edge('Bangalore', 'Pune', length =824)
+                            G.add_edge('Bangalore', 'Maduraj', length =404)
+                            G.add_edge('Pune', 'Maduraj', length =1195)
+                            
+                            pos = nx.spring_layout(G)  
+                            nx.draw(G,pos,node_color='k', with_labels = True)
+                            path = nx.shortest_path(G,source=_from_,target=__to__,weight='length')
+                            path_edges = zip(path,path[1:])
+                            nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='g')
+                            nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='g',width=3)
+                            plt.show()
+
+                            #coloring a streight line for the flight
+                            kolorki = []
+                            for i in G.edges():
+                                if i == (_from_, __to__):
+                                    kolorki.append('blue')
+                                else:
+                                    kolorki.append('black')
+
+                            nx.draw(G,pos,node_color= 'black' , edge_color = kolorki, with_labels = True)
+                            nx.draw_networkx_nodes(G,pos,nodelist=(_from_,__to__),node_color='blue')
+                            plt.show()                       
+
+                            print("Shortest path: ", nx.shortest_path_length(G,source=_from_,target=__to__,weight='length'),' km')
+                            plt.show()
+                            
+                            #__________________________________AIR and ROAD___________________________
+                            
+                            #limitations: if the shortest path would be longer than 3 this snippet would need to
+                            #be changed
+                            
+                            if len(path) ==3:
+                                self.air_plotter(_from_,__to__)
+                                self.plotter(path[0],path[1])
+                                self.plotter(path[1],path[2])
+                                gmap.draw("Map_route.html")
+
+                            if len(path) ==2:
+                                self.air_plotter(_from_,__to__)
+                                self.plotter(path[0],path[1])
+                                gmap.draw("Map_route.html")
+                            
+
+                        #if there is no space on the road --> stay in the city 
+                        elif reduced_capacity > city_distance_road.values()[i][3]:
+                            road_fraction = reduced_capacity - (reduced_capacity - city_distance_road.values()[i][3])
+                            print ('Those packages are going by road ',road_fraction)
+                            city_distance_road.values()[i][3]= city_distance_road.values()[i][3] - road_fraction
+                            print ('staying at the city' , reduced_capacity - road_fraction)
+                            packages_queued[_from_] += reduced_capacity - road_fraction
+                            
+                            
+                            
+                            #plane road + stay --> optimal road, streight flight + stay add to list and color node 
+
+                            G = nx.Graph()
+                            G.add_nodes_from(["Dehli", "Ahmadabad","Kolkata",'Bangalore','Pune','Maduraj'])
+                            G.add_edge('Dehli', 'Ahmadabad', length =890)
+                            G.add_edge('Dehli', 'Kolkata', length =1422)
+                            G.add_edge('Dehli', 'Bangalore', length =2168)
+                            G.add_edge('Dehli', 'Pune', length =1450)
+                            G.add_edge('Dehli', 'Maduraj', length = 2603)
+
+                            G.add_edge('Ahmadabad', 'Kolkata', length =1902)
+                            G.add_edge('Ahmadabad', 'Bangalore', length =1403)
+                            G.add_edge('Ahmadabad', 'Pune', length =624)
+                            G.add_edge('Ahmadabad', 'Maduraj', length =1807)
+                            G.add_edge('Kolkata', 'Bangalore', length =1778)
+                            G.add_edge('Kolkata', 'Pune', length =1782)
+                            G.add_edge('Kolkata', 'Maduraj', length =2043)
+
+                            G.add_edge('Bangalore', 'Pune', length =824)
+                            G.add_edge('Bangalore', 'Maduraj', length =404)
+                            G.add_edge('Pune', 'Maduraj', length =1195)
+                            
+                            pos = nx.spring_layout(G)  
+                            nx.draw(G,pos,node_color='k', with_labels = True)
+                            path = nx.shortest_path(G,source=_from_,target=__to__,weight='length')
+                            path_edges = zip(path,path[1:])
+                            nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='g')
+                            nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='g',width=3)
+                            print("Shortest path: ", nx.shortest_path_length(G,source=_from_,target=__to__,weight='length'),' km')
+                            plt.show()
+
+                            #coloring a streight line for the flight
+                            kolorki = []
+                            for i in G.edges():
+                                if i == (_from_, __to__):
+                                    kolorki.append('blue')
+                                else:
+                                    kolorki.append('black')
+
+                            nx.draw(G,pos,node_color= 'black' , edge_color = kolorki, with_labels = True)
+                            nx.draw_networkx_nodes(G,pos,nodelist=(_from_,__to__),node_color='blue')
+                            plt.show()                       
+         
+                            nx.draw(G,pos,node_color= 'black' , with_labels = True)
+                            nx.draw_networkx_nodes(G,pos,nodelist=(_from_,__to__),node_color=('orange','black'))
+                            plt.show()   
+                    
+                            #____________________STAY AND AIR AND ROAD________________________
+                    
+                            if len(path) ==3:
+                                self.air_plotter(_from_,__to__)
+                                self.plotter(path[0],path[1])
+                                self.plotter(path[1],path[2])
+                                gmap.draw("Map_route.html")
+
+                            if len(path) ==2:
+                                self.air_plotter(_from_,__to__)
+                                self.plotter(path[0],path[1])
+                                gmap.draw("Map_route.html")
+   
+                        
+                elif city_distance_road.values()[i][1] == False:
+                    
+                    if __capacity__ <= city_distance_road.values()[i][3]:
+                        print ('Road: ', __capacity__)
+                        city_distance_road.values()[i][3] = city_distance_road.values()[i][3] - __capacity__
+                        print city_distance_road.values()[i][3]
+                        
+                        G = nx.Graph()
+                        G.add_nodes_from(["Dehli", "Ahmadabad","Kolkata",'Bangalore','Pune','Maduraj'])
+                        G.add_edge('Dehli', 'Ahmadabad', length =890)
+                        G.add_edge('Dehli', 'Kolkata', length =1422)
+                        G.add_edge('Dehli', 'Bangalore', length =2168)
+                        G.add_edge('Dehli', 'Pune', length =1450)
+                        G.add_edge('Dehli', 'Maduraj', length = 2603)
+
+                        G.add_edge('Ahmadabad', 'Kolkata', length =1902)
+                        G.add_edge('Ahmadabad', 'Bangalore', length =1403)
+                        G.add_edge('Ahmadabad', 'Pune', length =624)
+                        G.add_edge('Ahmadabad', 'Maduraj', length =1807)
+                        G.add_edge('Kolkata', 'Bangalore', length =1778)
+                        G.add_edge('Kolkata', 'Pune', length =1782)
+                        G.add_edge('Kolkata', 'Maduraj', length =2043)
+
+                        G.add_edge('Bangalore', 'Pune', length =824)
+                        G.add_edge('Bangalore', 'Maduraj', length =404)
+                        G.add_edge('Pune', 'Maduraj', length =1195)
+                        pos = nx.spring_layout(G)  
+                        
+                        nx.draw(G,pos,node_color='k', with_labels = True)
+                        path = nx.shortest_path(G,source=_from_,target=__to__,weight='length')
+                        path_edges = zip(path,path[1:])
+                        nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='g', with_labels = True)
+                        nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='g',width=5)
+                        print("Shortest path: ", nx.shortest_path_length(G,source=_from_,target=__to__,weight='length'),' km')
+                        plt.show()
+                        
+                        if len(path) ==3:
+                            self.plotter(path[0],path[1])
+                            self.plotter(path[1],path[2])
+                            gmap.draw("Map_route.html")
+
+                        if len(path) ==2:
+                            
+                            self.plotter(path[0],path[1])
+                            gmap.draw("Map_route.html")                       
+                        
+                        
+                        
+                        #if there is no space on the road --> stay in the city 
+                    elif __capacity__ > city_distance_road.values()[i][3]:
+                        road_fraction = __capacity__ - (__capacity__ - city_distance_road.values()[i][3])
+                        print ('Those packages are going by road ',road_fraction)
+                        city_distance_road.values()[i][3]= city_distance_road.values()[i][3] - __capacity__
+                        print ('staying at the city' , __capacity__ - road_fraction)
+                        
+                        packages_queued[_from_] += __capacity__ - road_fraction
+                        
+                        
+                        G = nx.Graph()
+                        G.add_nodes_from(["Dehli", "Ahmadabad","Kolkata",'Bangalore','Pune','Maduraj'])
+                        G.add_edge('Dehli', 'Ahmadabad', length =890)
+                        G.add_edge('Dehli', 'Kolkata', length =1422)
+                        G.add_edge('Dehli', 'Bangalore', length =2168)
+                        G.add_edge('Dehli', 'Pune', length =1450)
+                        G.add_edge('Dehli', 'Maduraj', length = 2603)
+
+                        G.add_edge('Ahmadabad', 'Kolkata', length =1902)
+                        G.add_edge('Ahmadabad', 'Bangalore', length =1403)
+                        G.add_edge('Ahmadabad', 'Pune', length =624)
+                        G.add_edge('Ahmadabad', 'Maduraj', length =1807)
+                        G.add_edge('Kolkata', 'Bangalore', length =1778)
+                        G.add_edge('Kolkata', 'Pune', length =1782)
+                        G.add_edge('Kolkata', 'Maduraj', length =2043)
+
+                        G.add_edge('Bangalore', 'Pune', length =824)
+                        G.add_edge('Bangalore', 'Maduraj', length =404)
+                        G.add_edge('Pune', 'Maduraj', length =1195)
+                            
+                        pos = nx.spring_layout(G)  
+                        nx.draw(G,pos,node_color='k', with_labels = True)
+                        path = nx.shortest_path(G,source=_from_,target=__to__,weight='length')
+                        path_edges = zip(path,path[1:])
+                        nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='g')
+                        nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='g',width=3)
+                        print("Shortest path: ", nx.shortest_path_length(G,source=_from_,target=__to__,weight='length'),' km')
+                        plt.show()
+                         
+                        nx.draw(G,pos,node_color= 'black' , with_labels = True)
+                        nx.draw_networkx_nodes(G,pos,nodelist=(_from_,__to__),node_color=('orange','black'))
+                        plt.show()   
+                        
+                        if len(path) ==3:
+                            self.plotter(path[0],path[1])
+                            self.plotter(path[1],path[2])
+                            gmap.draw("Map_route.html")
+
+                        if len(path) ==2:
+                            
+                            self.plotter(path[0],path[1])
+                            gmap.draw("Map_route.html")                         
+               
+                        
+city_distance_road = { ('Ahmadabad',"Dehli"): [890, True, 300,500],
+    ('Ahmadabad',"Kolkata"): [1902, False,0,400],
+    ('Ahmadabad',"Bangalore"): [1403, True,50,100],
+    ('Ahmadabad',"Pune"): [624, False,0, 200],
+    ('Ahmadabad',"Maduraj"):[1807, True,50,100],
+
+    ('Dehli', 'Ahmadabad'): [890, False, 0, 300],
+    ('Dehli', 'Kolkata'): [1422,True, 200, 500],
+    ('Dehli', 'Bangalore'): [2168,True, 50, 100],
+    ('Dehli', 'Pune'): [1450,False, 0, 200],
+    ('Dehli', 'Maduraj'):[2603,False,0, 300],
+
+
+    ('Kolkata','Dehli'): [1422,True, 100, 200],
+    ('Kolkata','Bangalore'): [1778, False,0, 200],
+    ('Kolkata','Pune'): [1782, False, 0, 150],
+    ('Kolkata','Maduraj'): [2043, True, 100, 200],
+    ('Kolkata','Ahmadabad'): [1902, False,0, 300],
+
+    ('Bangalore','Dehli'): [2168,True, 100,  200],
+    ('Bangalore','Ahmadabad'): [1403, False, 0, 100],
+    ('Bangalore','Kolkata'): [1778, True,100, 200],
+    ('Bangalore','Pune'): [824, True,100, 100],
+    ('Bangalore','Maduraj'):[404, True,100, 100],
+
+    ('Pune','Maduraj'): [1195, True,100, 100],
+    ('Pune','Bangalore'): [824, True, 50, 100],
+    ('Pune','Kolkata'): [1782, False, 0, 150],
+    ('Pune','Ahmadabad'): [624, False, 0, 300],
+    ('Pune','Dehli'): [1450,False,0,  100],
+
+    ('Maduraj','Dehli'):[2603,False,0, 200],
+    ('Maduraj','Ahmadabad'):[1807, True,100, 200],
+    ('Maduraj','Kolkata'): [2043, True,200, 300],
+    ('Maduraj','Bangalore'):[404, True,20, 100],
+    ('Maduraj','Pune'): [1195, True,40, 100] 
+    }
+        
+emp1 = Delivery(city_distance_road)
+emp1.check_availability()
+emp1.displayCount()
+
+print packages_queued  #Those are the packages that you will need to push within next itteration
+
+
+#Open the "Map_route.html" file on your local machine to see the visualized route
