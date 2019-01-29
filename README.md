@@ -1,3 +1,5 @@
+This repository has materials and work from Introduction to Algorithms, Computational Mathematics and Computational Modeling class taken in Spring 2018
+
 ---------------------------- 4.2 ----------------------------
 
 HAT CHECK
